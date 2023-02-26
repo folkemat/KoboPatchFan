@@ -1,5 +1,7 @@
 #Filename: generatorClass.py
 
+import sys
+import subprocess
 import os
 import platform
 from configSettingsClass import configSettings
@@ -87,7 +89,11 @@ class generator:
         try:
             path = str(configSettings.getSetting(self, "working_dir"))
             folder_path = os.path.join(path, "out")
-            os.startfile(folder_path)
+            if sys.platform == "win32":
+                os.startfile(folder_path)
+            else:
+                opener = "open" if sys.platform == "darwin" else "xdg-open"
+                subprocess.call([opener, folder_path])
         except Exception as e:
             self._view.tab_widget.gen_plainTextEdit.insertPlainText("Open File Error: "+str(e))
             self._view.tab_widget.gen_plainTextEdit.moveCursor(QTextCursor.MoveOperation.End)

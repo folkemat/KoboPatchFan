@@ -1,6 +1,8 @@
 
 #Filename: workingDirClass.py
 
+import sys
+import subprocess
 import os
 import pathlib
 from os.path import expanduser
@@ -116,6 +118,10 @@ class WorkingDir:
     def openWorkingFolder(self):
         try:
             path = str(configSettings.getSetting(self, "working_dir"))
-            os.startfile(path)
+            if sys.platform == "win32":
+                os.startfile(path)
+            else:
+                opener = "open" if sys.platform == "darwin" else "xdg-open"
+                subprocess.call([opener, path])
         except Exception as e:
             configSettings.log(self, "Error: Could not open working dir folder")

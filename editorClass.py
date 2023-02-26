@@ -1,5 +1,6 @@
 #Filename: editorClass.py
-
+import sys
+import subprocess
 import os
 from configSettingsClass import configSettings
 from loadDataThreadClass import LoadDataThread
@@ -279,7 +280,12 @@ class editor:
         try:
             path = str(configSettings.getSetting(self, "working_dir"))
             folder_path = os.path.join(path, "src")
-            os.startfile(folder_path)
+            if sys.platform == "win32":
+                os.startfile(folder_path)
+            else:
+                opener = "open" if sys.platform == "darwin" else "xdg-open"
+                subprocess.call([opener, folder_path])
+                
         except Exception as e:
             self._view.tab_widget.label_edit_filename.setText("Error: Cannot open folder src!")
             configSettings.log(self, "Error: Cannot open folder src: "+str(e))
