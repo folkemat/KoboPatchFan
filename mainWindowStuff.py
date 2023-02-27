@@ -21,7 +21,7 @@ class KoboPatchFanUi(QMainWindow):
     super().__init__()
 
     self.setWindowTitle('KoboPatchFan {}'.format(__version__))
-    self.setMinimumSize(QSize(600, 570))
+    self.setMinimumSize(QSize(600, 600))
 
     self.tab_widget = mainTabs(self)
     self.setCentralWidget(self.tab_widget)
