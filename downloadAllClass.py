@@ -38,7 +38,7 @@ class downloadAllClass:
     def startDownloading(self, urls):
         firmwareLink = urls[0]
         self.patchLink = urls[1]
-        path = str(configSettings.getSetting(self, "working_dir"))
+        path = str(configSettings(self._settings).app_folder)
         #start with the download of the FIRMWARE
         self.download_firmware_thread = DownloadThread(firmwareLink, path)
         self.download_firmware_thread.finished.connect(self.firmware_download_finished) #start patch-download after finish
@@ -65,7 +65,7 @@ class downloadAllClass:
 
         #after firmware is finish, begin patch download
         configSettings.log(self, "Starting patch download ...")
-        path = str(configSettings.getSetting(self, "working_dir"))
+        path = str(configSettings(self._settings).app_folder)
         self.download_patch_thread = DownloadThread(self.patchLink, path)
         self.download_patch_thread.finished.connect(self.patch_download_finished)
         self.download_patch_thread.error.connect(self.error)
@@ -96,7 +96,7 @@ class downloadAllClass:
     def startExtracting(self, filename):
         #start with the extraction of the PATCH
         configSettings.log(self, "Start extraction of patch "+filename+" ...")
-        path = str(configSettings.getSetting(self, "working_dir"))
+        path = str(configSettings(self._settings).app_folder)
         patch_file_path = os.path.join(path, filename)
         self.extract_thread = ExtractThread(patch_file_path, path)
         self.extract_thread.extractionFinished.connect(self.patch_extraction_finished)
@@ -120,7 +120,7 @@ class downloadAllClass:
     
     def copyFirmware(self):
         try:
-            path = str(configSettings.getSetting(self, "working_dir"))
+            path = str(configSettings(self._settings).app_folder)
             src_file_path = os.path.join(path, self.firmwareFileName)
             destination_folder = os.path.join(path, "src")
             dst_dir_path = os.path.join(path, destination_folder)
@@ -225,7 +225,7 @@ class downloadAllClass:
         return firmwareLink, patchLink
 
     def readDbConfig(self):
-        path = str(configSettings.getSetting(self, "working_dir"))
+        path = str(configSettings(self._settings).app_folder)
         filename = os.path.join(path, "kfw.js")
         
         if not os.path.isfile(filename):
@@ -263,7 +263,7 @@ class downloadAllClass:
             return
         configSettings.log(self, "Successfully executed readDbConfig and assigned variables")
 
-        patchPatch = str(configSettings.getSetting(self, "working_dir"))
+        patchPatch = str(configSettings(self._settings).app_folder)
         patchFilename = "patches.json"
         patch_file_path = os.path.join(patchPatch, patchFilename)
         linkList = []

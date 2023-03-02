@@ -1,5 +1,5 @@
 from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import QRadioButton, QHBoxLayout, QLabel, QPushButton, QVBoxLayout, QGroupBox, QSizePolicy
+from PyQt6.QtWidgets import QRadioButton, QHBoxLayout, QLabel, QPushButton, QVBoxLayout, QGroupBox, QSizePolicy, QPlainTextEdit
 
 def _createWorkingDir(self):
 
@@ -12,14 +12,11 @@ def _createWorkingDir(self):
     vbox = QVBoxLayout()
     self.workingDirGroupbox.setLayout(vbox)
 
-    """Create and add the buttons to the box"""
-    self.changeWorkingDirButton = QPushButton('Change working directory...')
-    self.applyWorkingDirButton = QPushButton('Save')
-    self.doneWorkingDirButton = QPushButton('Done')
-
     """Create and add the label to the box"""
-    self.workingDirLabel = QLabel()
-    #self.workingDirLabel.setWordWrap(True)
+    self.working_dir_plainTextEdit = QPlainTextEdit()
+    self.working_dir_plainTextEdit.setReadOnly(True)
+    self.working_dir_plainTextEdit.setFixedHeight(50)
+
     self.firstStepLabel = QLabel()
     self.firstStepLabel.setWordWrap(True)
     self.firstStepLabel.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -37,17 +34,9 @@ def _createWorkingDir(self):
     self.openFolderButton.setFixedHeight(50)
 
     """FINAL ADD: Add item by item"""
-    # 0. Explain-label
     vbox.addWidget(self.firstStepLabel)
-    # 1. done button
-    vbox.addWidget(self.doneWorkingDirButton, alignment=Qt.AlignmentFlag.AlignCenter)
-    # 2. working dir path label
-    vbox.addWidget(self.workingDirLabel, alignment=Qt.AlignmentFlag.AlignCenter)
-    # 3. change button
-    vbox.addWidget(self.changeWorkingDirButton, alignment=Qt.AlignmentFlag.AlignCenter)
-    # 4. radiobutton about folder-name
+    vbox.addWidget(self.working_dir_plainTextEdit, alignment=Qt.AlignmentFlag.AlignCenter)
     vbox.addWidget(self.createFolderRadiobutton)
-    # 5. open folder button
     vbox.addWidget(self.openFolderButton)
 
     self.tab4left_half.addWidget(self.workingDirGroupbox)

@@ -34,8 +34,7 @@ class kpController(QObject):
         # Connect pyqtSignals and pyqtSlots
         self._connectpyqtSignals()
         #Ini
-        self.working_dir.updateWorkingDirLabel()
-        self.working_dir.showWorkingDirEdit()
+        self.working_dir.checkForFolder()
         self.update_db.checkForDb()
         self.specifications_picker.initComboKobos()
         self.version_picker.initComboVersions()
@@ -44,10 +43,6 @@ class kpController(QObject):
     def _connectpyqtSignals(self):
         """Connect pyqtSignals and pyqtSlots."""
         #Working dir stuff
-        self._view.tab_widget.changeWorkingDirButton.clicked.connect(partial(self.working_dir._changeWorkingDir))
-        self._view.tab_widget.applyWorkingDirButton.clicked.connect(partial(self.working_dir._saveWorkingDir))
-        self._view.tab_widget.workingDirGroupbox.clicked.connect(partial(self.working_dir.showWorkingDirEdit))
-        self._view.tab_widget.doneWorkingDirButton.clicked.connect(partial(self.working_dir.showWorkingDirEdit))
         self._view.tab_widget.openFolderButton.clicked.connect(partial(self.working_dir.openWorkingFolder))
         #Specification picker stuff
         self._view.tab_widget.combo.activated.connect(partial(self.specifications_picker.comboSelectKobo))

@@ -1,7 +1,7 @@
 # Filename: configSettingsClass.py
 
-import pathlib
-from PyQt6.QtCore import QTime
+import os
+from PyQt6.QtCore import QTime, QStandardPaths
 
 class configSettings:
     allKoboDevices = [
@@ -29,14 +29,14 @@ class configSettings:
         ("Libra 2",["kobo9", "00000000-0000-0000-0000-000000000388", "Kobo Libra 2"]),
         ("Clara 2E",["kobo10", "00000000-0000-0000-0000-000000000386", "Kobo Clara 2E"])
         ]
+    documents_folder = QStandardPaths.writableLocation(QStandardPaths.StandardLocation.DocumentsLocation)
+    working_folder = "KoboPatchFan"
+    app_folder = os.path.join(documents_folder, working_folder)
 
     def __init__(self, settings):
         self._settings = settings
-        #keys = settings.allKeys()
-        #settings.remove("kobo_device")
-        #settings.remove("kobo_this_version")
-
-        homePath = pathlib.Path.cwd()
+        #settings.remove("working_dir")
+        #settings.remove("working_folder")
 
         filename_libnickel = "libnickel.so.1.0.0.yaml"
         filename_libadobe = "libadobe.so.yaml"
@@ -44,8 +44,6 @@ class configSettings:
         filename_nickel = "nickel.yaml"
         
         allStandardSettings =	{
-        "working_dir":  str(homePath),
-        "working_folder": "KoboPatchFan",
         "kobo_device": "Forma",
         "kobo_this_version": "0.00.00000",
         "filename_libnickel":filename_libnickel,

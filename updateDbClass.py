@@ -14,7 +14,7 @@ class updateDb:
 
     def downloadPatchVersions(self):
         url = "https://api.github.com/repos/pgaskin/kobopatch-patches/releases/latest"
-        path = str(configSettings.getSetting(self, "working_dir"))
+        path = str(configSettings(self._settings).app_folder)
         filename = "patches.json"
         file_path = os.path.join(path, filename)
         configSettings.log(self, "Downloading patches.json from "+url+" to "+file_path)
@@ -73,7 +73,7 @@ class updateDb:
     def downloadDb(self):
         #first: Download the database
         url = "https://pgaskin.net/KoboStuff/kfw.db.js"
-        path = str(configSettings.getSetting(self, "working_dir"))
+        path = str(configSettings(self._settings).app_folder)
         filename = "kfw.js"
         file_path = os.path.join(path, filename)
         configSettings.log(self, "Downloading kfw.js from "+url+" to "+file_path)
@@ -101,7 +101,7 @@ class updateDb:
 
 
     def getRelevantData(self, mode):
-        path = str(configSettings.getSetting(self, "working_dir"))
+        path = str(configSettings(self._settings).app_folder)
         filename = "kfw.js"
         file_path = os.path.join(path, filename)
 
@@ -163,7 +163,7 @@ class updateDb:
         return versionList
 
     def fileExistence(self):
-        path = str(configSettings.getSetting(self, "working_dir"))
+        path = str(configSettings(self._settings).app_folder)
         kfwFilename = "kfw.js"
         kfw_file_path = os.path.join(path, kfwFilename)
         patchesFilename = "patches.json"

@@ -45,7 +45,7 @@ class editor:
         #Here we calculate which file we want to load based on which tab(button) is currently selected
 
         index = self.choosenFileTab 
-        homePath = str(configSettings.getSetting(self, "working_dir"))
+        homePath = str(configSettings(self._settings).app_folder)
         src_path = os.path.join(homePath, "src")
         filename = "Unknown"
 
@@ -278,7 +278,7 @@ class editor:
 
     def openFolderSrc(self):
         try:
-            path = str(configSettings.getSetting(self, "working_dir"))
+            path = str(configSettings(self._settings).app_folder)
             folder_path = os.path.join(path, "src")
             if sys.platform == "win32":
                 os.startfile(folder_path)

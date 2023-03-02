@@ -41,7 +41,7 @@ class verifyDownload:
             configSettings.log(self, "Status Verify: Error verifying configuration")
 
     def parsePatchJson(self):
-        path = str(configSettings.getSetting(self, "working_dir"))
+        path = str(configSettings(self._settings).app_folder)
         filename = "patches.json"
         file_path = os.path.join(path, filename)
         versionList = []

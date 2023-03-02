@@ -19,7 +19,7 @@ class generator:
         self.process_success = False
 
     def runScript(self):
-        homePath = str(configSettings.getSetting(self, "working_dir"))
+        homePath = str(configSettings(self._settings).app_folder)
         #reset output
         self._view.tab_widget.gen_plainTextEdit.setStyleSheet("color: none")
         self._view.tab_widget.gen_plainTextEdit.clear()
@@ -75,7 +75,7 @@ class generator:
         self.showExport()
 
     def showExport(self):
-        path = str(configSettings.getSetting(self, "working_dir"))
+        path = str(configSettings(self._settings).app_folder)
         file_path = os.path.join(path, "out")
         filename = "KoboRoot.tgz"
         final_file_path = os.path.join(file_path, filename)
@@ -87,7 +87,7 @@ class generator:
     
     def openFolderOut(self):
         try:
-            path = str(configSettings.getSetting(self, "working_dir"))
+            path = str(configSettings(self._settings).app_folder)
             folder_path = os.path.join(path, "out")
             if sys.platform == "win32":
                 os.startfile(folder_path)
@@ -101,7 +101,7 @@ class generator:
             configSettings.log(self, "Open File Error: "+str(e))
 
     def doTheExport(self):
-        path = str(configSettings.getSetting(self, "working_dir"))
+        path = str(configSettings(self._settings).app_folder)
         file_path = os.path.join(path, "out")
         filename = "KoboRoot.tgz"
         final_file_path = os.path.join(file_path, filename)

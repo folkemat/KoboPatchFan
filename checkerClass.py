@@ -15,7 +15,7 @@ class checkerClass:
         self.patchVersion = "Unknown"
 
     def readKobopatchyaml(self):
-        path = str(configSettings.getSetting(self, "working_dir"))
+        path = str(configSettings(self._settings).app_folder)
         kobopatch_file_path = os.path.join(path, "kobopatch.yaml")
         #Processing the patch file
         try:
