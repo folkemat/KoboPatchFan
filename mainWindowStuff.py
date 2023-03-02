@@ -12,7 +12,7 @@ from statusMenu import _createStatusSite
 from updateDbWindow import _createUpdateDb
 from editorWindow import _createEditor
 from genWindow import _createGenerator
-__version__ = '1.0'
+__version__ = '1.0.1'
 
 class KoboPatchFanUi(QMainWindow):
   """KoboPatchFan's view (GUI)."""

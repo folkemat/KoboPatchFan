@@ -23,12 +23,7 @@ class WorkingDir:
                 configSettings.log(self, "Error: Could not create working dir folder: "+str(e))
 
         abs_path = QDir(working_dir).filePath(working_folder_name)
-        file_info = QFileInfo(app_folder)
-        if file_info.isWritable() and file_info.isReadable():
-            self._view.tab_widget.working_dir_plainTextEdit.setPlainText(str(abs_path))
-        else:
-            self._view.tab_widget.working_dir_plainTextEdit.setPlainText("Not read- or writeable: "+str(abs_path))
-            configSettings.log(self, "Error: working folder not read- or/and writeable")
+        self._view.tab_widget.working_dir_plainTextEdit.setPlainText(str(abs_path))
 
     def openWorkingFolder(self):
         try:
