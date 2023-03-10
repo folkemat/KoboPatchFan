@@ -7,6 +7,8 @@ from loadDataThreadClass import LoadDataThread
 from PyQt6.QtGui import QFont
 from PyQt6.QtWidgets import QLabel, QPlainTextEdit, QGroupBox, QPushButton, QVBoxLayout, QCheckBox, QTextEdit, QHBoxLayout, QWidget
 from functools import partial
+import yaml
+from savedPatchesClass import savedPatches
 
 class editor:
     def __init__(self, settings, view):
@@ -118,7 +120,6 @@ class editor:
         #Here, changes from the Open Edit Mode are written to the file.
         
         file_path = self.whichFileToLoad()
-
         #Old and new text:
         new_text = self.editor_text #Read out updated text from the editor
         old_text = more_text
@@ -162,6 +163,7 @@ class editor:
         #and only serves to update the label
         filename = os.path.basename(file_path)
         self._view.tab_widget.label_edit_filename.setText("File: "+str(filename)+" | Patches: "+str(patch_numbers)+" | ")
+        self._view.tab_widget.search_edit.setPlaceholderText("Search "+filename+" ...")
         self.buildThreadDone = True
 
     def reloadFile(self):
@@ -169,7 +171,6 @@ class editor:
 
         # First, remove all widgets from the chkBoxLayout and clear everthing
         self.clearLayout(self._view.tab_widget.chkBoxLayout)
-
         #Choose which file to load
         choosenTab = self.choosenFileTab
         file_path = self.whichFileToLoad()
@@ -184,7 +185,7 @@ class editor:
                 return
             #Create a thread in which the data for the widgets is calculated 
             self.buildThreadDone = False
-            self.load_thread = LoadDataThread(file_path)
+            self.load_thread = LoadDataThread(file_path, 0)
             self.load_thread.create_patches_components.connect(self.create_patch_gui) #This is called for every patch option found
             self.load_thread.data_loaded.connect(self.handle_data_loaded) #When everything is loaded and set up
             self.load_thread.start()
@@ -291,6 +292,44 @@ class editor:
             configSettings.log(self, "Error: Cannot open folder src: "+str(e))
             return
 
+    def save_kobopatch(self):
+        if not savedPatches.checkKobopatchyamlFolderAndFile(self):
+            configSettings.log(self, "Error: Could not create kobopatchfile")
+            return
+        target_file_path = self.whichFileToLoad()
+        target_file_name = os.path.basename(target_file_path)
+       # target_file_name = target_file_name.replace(target_file_name, "src/"+target_file_name)
+        app_folder = str(configSettings(self._settings).app_folder)
+        save_folder_name = "kobopatch_save"
+        save_folder = os.path.join(app_folder, save_folder_name)
+        kobopatch_file_name = "kobopatch.yaml"
+        kobopatch_unsave_file_path = os.path.join(app_folder, kobopatch_file_name)
+        kobopatch_save_file_path = os.path.join(save_folder, kobopatch_file_name)
+        
+        for checkbox, groupbox, patch_group_text, number_of_patch in self.checkboxes:
+            if checkbox.isChecked():
+                try: 
+                    target_option = checkbox.text()
+
+                    with open(kobopatch_save_file_path, encoding='utf-8') as f:
+                        data = yaml.safe_load(f)
+
+                    overrides = data.get('overrides')
+                    for file_name in overrides:
+                        if target_file_name in file_name:
+                            options = overrides.get(file_name)
+                            if not options:
+                                options = {}
+                                options[target_option] = True
+                                overrides[file_name] = options
+                            if target_option in options:         
+                                pass
+                            else:
+                                options[target_option] = True 
+                    with open(kobopatch_save_file_path, 'w', encoding='utf-8') as f:
+                        yaml.dump(data, f)
+                except Exception as e:
+                    configSettings.log(self, "Error kobopatch.yaml: "+str(e))
 
     def filter_checkboxes(self):
         # Die Sucheingabe des Benutzers abrufen

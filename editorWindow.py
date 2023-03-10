@@ -1,8 +1,9 @@
 # Filename: editorWindow.py
 
 from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QColor
 from PyQt6.QtWidgets import (QLabel, QPushButton, QVBoxLayout, QHBoxLayout,
-                             QGroupBox, QLineEdit, QWidget,QScrollArea)
+                             QGroupBox, QLineEdit, QWidget,QScrollArea, QGraphicsDropShadowEffect)
 
 def _createEditor(self):
     
@@ -26,10 +27,19 @@ def _createEditor(self):
     self.label_and_search_layout = QHBoxLayout()
     self.label_edit_filename = QLabel()
     self.label_and_search_layout.addWidget(self.label_edit_filename)
-    #self.label_edit_filename.setWordWrap(True)
     self.search_edit = QLineEdit()
     self.search_edit.setPlaceholderText("Search ...")
     self.label_and_search_layout.addWidget(self.search_edit)
+    self.save_kobopatch_button = QPushButton("Backup selection")
+    # create QGraphicsDropShadowEffect
+    shadow_effect = QGraphicsDropShadowEffect()
+    shadow_effect.setBlurRadius(10)
+    shadow_effect.setColor(QColor("#FF8C00"))
+    shadow_effect.setOffset(0, 0)
+    shadow_effect.setBlurRadius(15)
+    self.save_kobopatch_button.setGraphicsEffect(shadow_effect)
+
+    self.label_and_search_layout.addWidget(self.save_kobopatch_button)
 
     self.chkBoxLayout = QVBoxLayout()
     self.chkBoxLayout.addStretch(1) 
@@ -46,8 +56,9 @@ def _createEditor(self):
     self.control_box.setAlignment(Qt.AlignmentFlag.AlignCenter)
     save_label = QLabel("Note: Changes are automatically saved")
     self.reload_button = QPushButton("Reload")
-    self.deselect_button = QPushButton("Deselect all")
-    self.open_src_button = QPushButton("Open File Folder")
+    self.deselect_button = QPushButton("Deselect All")
+    self.open_src_button = QPushButton("Open Folder")
+
     self.control_layout = QHBoxLayout()
     self.control_layout.addWidget(save_label)
     self.control_layout.addWidget(self.reload_button)
@@ -59,7 +70,6 @@ def _createEditor(self):
     self.editor_widget = QWidget()
     self.editor_layout = QVBoxLayout(self.editor_widget)
     self.editor_layout.setContentsMargins(0, 0, 0, 0)
-    #self.editor_layout.setSpacing(4)
     self.editor_layout.addLayout(self.label_and_search_layout)
     self.editor_layout.addWidget(self.scroll_area)
     self.editor_layout.addWidget(self.control_box)

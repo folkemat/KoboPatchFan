@@ -16,6 +16,7 @@ from downloadAllClass import downloadAllClass
 from editorClass import editor
 from generatorClass import generator
 from checkerClass import checkerClass
+from savedPatchesClass import savedPatches
 
 # load from mainWindowStoff.py the GUI
 class kpMainWindowIni(KoboPatchFanUi):
@@ -44,6 +45,7 @@ def main():
     editor(view=view, settings=settings)
     generator(view=view, settings=settings)
     checkerClass(view=view, settings=settings)
+    savedPatches(view=view, settings=settings)
 
     # Execute the main loop
     sys.exit(kobopatchfan.exec())

@@ -39,7 +39,7 @@ def _createWorkingDir(self):
     vbox.addWidget(self.createFolderRadiobutton)
     vbox.addWidget(self.openFolderButton)
 
-    self.tab4left_half.addWidget(self.workingDirGroupbox)
-    self.tab4.layout.addLayout(generalWorkingDirLayout)
+    self.tab5left_half.addWidget(self.workingDirGroupbox)
+    self.tab5.layout.addLayout(generalWorkingDirLayout)
     generalWorkingDirLayout.addStretch(1)
     vbox.addStretch(1)

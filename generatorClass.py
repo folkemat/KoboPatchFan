@@ -6,9 +6,12 @@ import os
 import platform
 from configSettingsClass import configSettings
 from processThreadClass import ProcessThread
+from checkerClass import checkerClass
 from PyQt6.QtGui import QTextCursor
 from PyQt6.QtWidgets import QFileDialog
 import shutil
+import yaml
+import re
 
 class generator:
     def __init__(self, settings, view):
@@ -24,8 +27,10 @@ class generator:
         self._view.tab_widget.gen_plainTextEdit.setStyleSheet("color: none")
         self._view.tab_widget.gen_plainTextEdit.clear()
         self._view.tab_widget.export_button.setEnabled(False)
+        #this will write kobopatch.yaml
+        self.use_kobopatch(self._view.tab_widget.use_kobopatch_checkbox.isChecked())
         self.process_success = False
-
+        
         if platform.system() == 'Windows':
             file_name = 'kobopatch.bat'
             command = ['cmd', '/c', os.path.join(homePath, file_name)]
@@ -39,6 +44,7 @@ class generator:
             configSettings.log(self, "Error: Cannot run script: This operating system is not supported!")
             return
 
+        #start the process
         self.process_thread = ProcessThread(command)
         self.process_thread.finished.connect(self.on_process_finished)
         self.process_thread.errorChanged.connect(self.on_ready_read)
@@ -143,3 +149,89 @@ class generator:
         else:
             return False
             
+    def use_kobopatch(self, is_checked):
+        app_folder = str(configSettings(self._settings).app_folder)
+        save_folder_name = "kobopatch_save"
+        save_folder = os.path.join(app_folder, save_folder_name)
+        kobopatch_file_name = "kobopatch.yaml"
+        kobopatch_unsave_file_path = os.path.join(app_folder, kobopatch_file_name)
+        kobopatch_save_file_path = os.path.join(save_folder, kobopatch_file_name)
+        
+        if not is_checked: # delete patches
+            try:
+                with open(kobopatch_unsave_file_path, encoding='utf-8') as stream:
+                    data_unsave = yaml.safe_load(stream)
+                with open(kobopatch_save_file_path, encoding='utf-8') as stream:
+                    data_save = yaml.safe_load(stream)
+
+                overrides_unsave = data_unsave.get('overrides')
+                overrides_save = data_save.get('overrides')
+                for file_name_save in overrides_save:
+                    options_save = overrides_save.get(file_name_save)
+                    for file_name_unsave in overrides_unsave:
+                        if file_name_unsave in file_name_save:
+                            options_unsave = overrides_unsave.get(file_name_unsave)
+                            for option in options_save:
+                                if options_unsave:
+                                    if option in options_unsave:
+                                        del options_unsave[option]
+                                        print("Deleted "+option+" from "+file_name_save)
+                                    else:
+                                        print("Not deleted "+option+" to "+file_name_save)
+
+                with open(kobopatch_unsave_file_path, 'w', encoding='utf-8') as f:
+                    yaml.dump(data_unsave, f)
+            except Exception as e:
+                configSettings.log(self, "Error removing patches from save kobopatch.yaml: "+str(e))
+                return
+
+        else: #add patches
+
+            #first, write new version to saved kobopatch.yaml
+            target_firmware = checkerClass.readKobopatchyaml(self)
+            try:
+                with open(kobopatch_save_file_path, encoding='utf-8') as stream:
+                    data_save = yaml.safe_load(stream)
+
+                pattern = r"\d+\.\d+\.\d+"
+                firmware_in = data_save.get("in")
+                new_version = re.sub(pattern, target_firmware, firmware_in)
+                data_save["in"] = new_version
+                data_save["version"] = target_firmware
+
+                with open(kobopatch_save_file_path, 'w', encoding='utf-8') as f:
+                    yaml.dump(data_save, f)
+                    
+                #print("Wrote new version: old: "+str(firmware_in)+" new: "+new_version)
+            except Exception as e:
+                    configSettings.log(self, "Error write new version to saved kobopatch.yaml: "+str(e))
+                    return
+            
+            #second, copy saved patches to unsave_kobopatch.yaml file
+            try:
+                with open(kobopatch_unsave_file_path, encoding='utf-8') as stream:
+                    data_unsave = yaml.safe_load(stream)
+                
+                overrides_unsave = data_unsave.get('overrides')
+                overrides_save = data_save.get('overrides')
+
+                for file_name_save in overrides_save:
+                    options_save = overrides_save.get(file_name_save)
+                    for file_name_unsave in overrides_unsave:
+                        if file_name_unsave in file_name_save:
+                            options_unsave = overrides_unsave.get(file_name_unsave)
+                            for option in options_save:
+                                if not options_unsave:
+                                    options_unsave = {}
+                                    options_unsave[option] = options_save[option]
+                                    overrides_unsave[file_name_unsave] = options_unsave
+                                else:
+                                    options_unsave[option] = options_save[option] 
+
+                with open(kobopatch_unsave_file_path, 'w', encoding='utf-8') as f:
+                    yaml.dump(data_unsave, f)
+            except Exception as e:
+                configSettings.log(self, "Error add patches from save kobopatch.yaml to unsave kobopatch.yaml: "+str(e))
+                return
+        
+

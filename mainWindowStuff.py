@@ -1,7 +1,7 @@
 # Filename: mainWindowStuff.py
 
 from PyQt6.QtWidgets import  QHBoxLayout, QMainWindow, QTextEdit, QTabWidget, QVBoxLayout, QWidget, QGroupBox, QLabel
-from PyQt6.QtGui import QTextOption, QIcon
+from PyQt6.QtGui import QTextOption
 from PyQt6.QtCore import Qt, QSize
 from workingDir import _createWorkingDir
 from specificationsWindow import _createSpecifications
@@ -12,7 +12,8 @@ from statusMenu import _createStatusSite
 from updateDbWindow import _createUpdateDb
 from editorWindow import _createEditor
 from genWindow import _createGenerator
-__version__ = '1.0.1'
+from savedPatchesWindow import _createSavedPatches
+__version__ = '1.1.0'
 
 class KoboPatchFanUi(QMainWindow):
   """KoboPatchFan's view (GUI)."""
@@ -43,12 +44,14 @@ class mainTabs(QWidget):
     self.tab2 = QWidget()
     self.tab3 = QWidget()
     self.tab4 = QWidget()
+    self.tab5 = QWidget()
 
     # Add tabs
     self.tabs.addTab(self.tab1, "(1) Download")
     self.tabs.addTab(self.tab2, "(2) Select patches")
     self.tabs.addTab(self.tab3, "(3) Generate patch")
-    self.tabs.addTab(self.tab4, "Settings")
+    self.tabs.addTab(self.tab4, "Backup-Patches")
+    self.tabs.addTab(self.tab5, "Settings")
 
     # Change font size of tabs
     self.tabs.setStyleSheet("QTabBar::tab { height: 64px; }")
@@ -93,30 +96,44 @@ class mainTabs(QWidget):
     help_box3_layout.addWidget(self.help_label3)
     help_box3.setLayout(help_box3_layout)
 
-    # Create 4. (settings) tab
+    # Create 4. (kobopatch.yaml) tab
     self.tab4.layout = QVBoxLayout(self.tab4)
-    self.tab4.layout.setSpacing(0)
     self.tab4.setLayout(self.tab4.layout)
+
+    help_box4 = QGroupBox()
+    self.tab4.layout.addWidget(help_box4)
+    # Add Help label to third tab's groupbox
+    self.help_label4 = QLabel("The options here <b>survive</b> downloading new versions, so you don't have to select them again. To <b>add</b> a new option, click on <b>'Backup selection'</b> in tab (2). To <b>use</b> it, select <b>'Use Backup-Patches'</b> in tab (3).")
+    self.help_label4.setWordWrap(True)
+    help_box4_layout = QVBoxLayout()
+    help_box4_layout.addWidget(self.help_label4)
+    help_box4.setLayout(help_box4_layout)
+
+
+    # Create 5. (settings) tab
+    self.tab5.layout = QVBoxLayout(self.tab5)
+    self.tab5.layout.setSpacing(0)
+    self.tab5.setLayout(self.tab5.layout)
     # Create layout for "Left Half" and "Right Half" boxes
-    self.tab4left_half = QVBoxLayout()
-    self.tab4right_half = QVBoxLayout()
-    self.tab4right_half.setSpacing(0)
-    self.tab4left_half.setSpacing(0)
-    self.tab4left_half_widget = QWidget()
-    self.tab4left_half_widget.setLayout(self.tab4left_half)
-    self.tab4right_half_widget = QWidget()
-    self.tab4right_half_widget.setLayout(self.tab4right_half)
+    self.tab5left_half = QVBoxLayout()
+    self.tab5right_half = QVBoxLayout()
+    self.tab5right_half.setSpacing(0)
+    self.tab5left_half.setSpacing(0)
+    self.tab5left_half_widget = QWidget()
+    self.tab5left_half_widget.setLayout(self.tab5left_half)
+    self.tab5right_half_widget = QWidget()
+    self.tab5right_half_widget.setLayout(self.tab5right_half)
     # Create layout for "Log" box
     self.log_box = QGroupBox()
     self.log_box_layout = QVBoxLayout()
     self.log_box.setLayout(self.log_box_layout)
     # Add "Left Half" and "Right Half" boxes to first tab's layout
-    self.tab4_hbox = QHBoxLayout()
-    self.tab4_hbox.addWidget(self.tab4left_half_widget)
-    self.tab4_hbox.addWidget(self.tab4right_half_widget)
-    self.tab4.layout.addLayout(self.tab4_hbox)
+    self.tab5_hbox = QHBoxLayout()
+    self.tab5_hbox.addWidget(self.tab5left_half_widget)
+    self.tab5_hbox.addWidget(self.tab5right_half_widget)
+    self.tab5.layout.addLayout(self.tab5_hbox)
     # Add "Info" box to first tab's layout
-    self.tab4.layout.addWidget(self.log_box)
+    self.tab5.layout.addWidget(self.log_box)
     self.about_label = QLabel()
     self.about_label.setWordWrap(True)
     self.about_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -132,10 +149,10 @@ class mainTabs(QWidget):
     info_box1_layout.addWidget(self.about_label)
     info_box1_layout.addWidget(info_label)
     info_box1.setLayout(info_box1_layout)
-    self.tab4right_half.addWidget(info_box1)
+    self.tab5right_half.addWidget(info_box1)
     # Set stretch factor to make "Left Half" and "Right Half" boxes resizable
-    self.tab4_hbox.setStretch(0, 1)
-    self.tab4_hbox.setStretch(1, 1)
+    self.tab5_hbox.setStretch(0, 1)
+    self.tab5_hbox.setStretch(1, 1)
 
     # Add tabs to widget
     self.generalTabLayout.addWidget(self.tabs)
@@ -151,6 +168,7 @@ class mainTabs(QWidget):
     self._createStatusSite()
     self._createEditor()
     self._createGenerator()
+    self._createSavedPatches()
 
   def _createWorkingDir(self):
     _createWorkingDir(self)
@@ -178,3 +196,6 @@ class mainTabs(QWidget):
 
   def _createGenerator(self):
     _createGenerator(self)
+  
+  def _createSavedPatches(self):
+    _createSavedPatches(self)

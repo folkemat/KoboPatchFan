@@ -33,6 +33,6 @@ def _createStatusSite(self):
     """Add groupbox TO workingdir-layout"""
     self.log_box_layout.addWidget(self.statusSiteGroupbox)
     """Add  workingdir-layout TO tab1-layout"""
-    self.tab4.layout.addLayout(generalStatusSiteLayout)
+    self.tab5.layout.addLayout(generalStatusSiteLayout)
     vbox.addStretch(1)
     generalStatusSiteLayout.addStretch(1)

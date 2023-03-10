@@ -11,6 +11,7 @@ from downloadAllClass import downloadAllClass
 from editorClass import editor
 from generatorClass import generator
 from checkerClass import checkerClass
+from savedPatchesClass import savedPatches
 
 class kpController(QObject):
     """KoboPatchFan's Controller class."""
@@ -18,7 +19,6 @@ class kpController(QObject):
         """Controller initializer."""
         super(kpController, self).__init__()
 
-        #link to ausgelagerten dateien
         self.working_dir = WorkingDir(settings, view)
         self.version_picker = versionPicker(settings, view)
         self.specifications_picker = specificationsPicker(settings, view)
@@ -28,6 +28,7 @@ class kpController(QObject):
         self.editor = editor(settings, view)
         self.generator = generator(settings, view)
         self.checker = checkerClass(settings, view)
+        self.savedPatches = savedPatches(settings, view)
         #for easier use
         self._view = view
         self._settings = settings
@@ -73,12 +74,20 @@ class kpController(QObject):
         self._view.tab_widget.tabs.currentChanged.connect(partial(self.check_current_tab))
         self._view.tab_widget.deselect_button.clicked.connect(partial(self.editor.deselect_checkboxes))
         self._view.tab_widget.open_src_button.clicked.connect(partial(self.editor.openFolderSrc))
+        self._view.tab_widget.save_kobopatch_button.clicked.connect(partial(self.editor.save_kobopatch))
         #gen stuff
         self._view.tab_widget.run_button.clicked.connect(partial(self.generator.runScript))
         self._view.tab_widget.open_folder_button.clicked.connect(partial(self.generator.openFolderOut))
         self._view.tab_widget.export_button.clicked.connect(partial(self.generator.doTheExport))
+        #saved patches stuff
+        self._view.tab_widget.kobopatch_reload_button.clicked.connect(partial(self.savedPatches.loadKobopatchFile))
+        self._view.tab_widget.kobopatch_remove_all_button.clicked.connect(partial(self.savedPatches.kobopatch_remove_all))
+        self._view.tab_widget.kobopatch_deactivate_all_button.clicked.connect(partial(self.savedPatches.kobopatch_deactivate_all))
+        self._view.tab_widget.kobopatch_activate_all_button.clicked.connect(partial(self.savedPatches.kobopatch_activate_all))
     
     def check_current_tab(self, index):
         self._view.statusbar.showMessage("Current target firmware: "+self.checker.readKobopatchyaml())
         if index == 1:  # Tab2: Select-config
             self.editor.reloadFile()
+        elif index == 3:  # Tab4: Saved patches
+            self.savedPatches.loadKobopatchFile()

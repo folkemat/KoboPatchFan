@@ -18,13 +18,13 @@ def _createDownload(self):
     self.labelDownload.setText("<h3>Download the required files</h3>")
     self.labelDownload.setAlignment(Qt.AlignmentFlag.AlignCenter)
     self.labelDownload.setWordWrap(True)
-    self.labelDownload.setSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
+    #self.labelDownload.setSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
 
     self.labelDownloadInfo = QLabel()
     self.labelDownloadInfo.setText("Make sure you have selected your firmware and Kobo correctly!")
     self.labelDownloadInfo.setAlignment(Qt.AlignmentFlag.AlignCenter)
     self.labelDownloadInfo.setWordWrap(True)
-    self.labelDownloadInfo.setSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)  # Setze Größenrichtlinien
+    #self.labelDownloadInfo.setSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
 
     """Create and add the Buttons to the box"""
     self.buttonDownloadPauseResume = QPushButton("Pause")
