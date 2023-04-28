@@ -12,10 +12,7 @@ class specificationsPicker:
 
     def initComboKobos(self):
         #fill the combo with saved config data:
-        allKobos = configSettings(self._settings).allKoboDevices
         koboDevice = configSettings.getSetting(self, "kobo_device")
-        for kobo in allKobos:
-            self._view.tab_widget.combo.addItem(kobo[0])
         #set to last choose:
         index = self._view.tab_widget.combo.findText(koboDevice, Qt.MatchFlag.MatchFixedString)
         if index >= 0:

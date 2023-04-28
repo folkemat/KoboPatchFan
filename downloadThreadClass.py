@@ -44,7 +44,7 @@ class DownloadThread(QThread):
                 filename = self.url.split('/')[-1]
 
             # Combine the save path and the filename to get the full save path, exception for db
-            if "kfw.js" not in self.save_path and "patches.json" not in self.save_path:
+            if "kfw.js" not in self.save_path and "patches.json" not in self.save_path and "kfw_devices.js" not in self.save_path:
                 self.save_path = str(Path(self.save_path) / filename)
 
             # Calculate the total file size
