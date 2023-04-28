@@ -194,7 +194,7 @@ class downloadAllClass:
                                 firmwareLink = sublist[4]
                                 break
         except Exception as e:
-            configSettings.log(self, "Error: Could perform createDownloadLink: "+str(e))
+            configSettings.log(self, "Error: Could not perform createDownloadLink: "+str(e))
             return
         if  firmwareLink == "Unknown":
             configSettings.log(self, "Error: Could not find firmware url for "+koboDevice+" with firmware "+firmwareVersion)
@@ -235,7 +235,7 @@ class downloadAllClass:
             with open(filename, "r") as file:
                 source = file.read()
         except:
-            self.log("readDbConfig: Cannot read file.")
+            configSettings.log("readDbConfig: Cannot read file.")
             return
 
         dh_pattern = r'var\s+dh\s*=\s*"([^"]+)"'
@@ -263,9 +263,9 @@ class downloadAllClass:
             return
         configSettings.log(self, "Successfully executed readDbConfig and assigned variables")
 
-        patchPatch = str(configSettings(self._settings).app_folder)
+        patchPath = str(configSettings(self._settings).app_folder)
         patchFilename = "patches.json"
-        patch_file_path = os.path.join(patchPatch, patchFilename)
+        patch_file_path = os.path.join(patchPath, patchFilename)
         linkList = []
         try:
             with open(patch_file_path, 'r') as file:

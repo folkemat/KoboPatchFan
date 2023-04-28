@@ -27,7 +27,8 @@ class configSettings:
         ("Elipsa",["kobo8", "00000000-0000-0000-0000-000000000387", "Kobo Elipsa"]),
         ("Sage",["kobo8", "00000000-0000-0000-0000-000000000383", "Kobo Sage"]),
         ("Libra 2",["kobo9", "00000000-0000-0000-0000-000000000388", "Kobo Libra 2"]),
-        ("Clara 2E",["kobo10", "00000000-0000-0000-0000-000000000386", "Kobo Clara 2E"])
+        ("Clara 2E",["kobo10", "00000000-0000-0000-0000-000000000386", "Kobo Clara 2E"]),
+        ("Elipsa 2E",["kobo11", "00000000-0000-0000-0000-000000000389", "Kobo Elipsa 2E"])
         ]
     documents_folder = QStandardPaths.writableLocation(QStandardPaths.StandardLocation.DocumentsLocation)
     working_folder = "KoboPatchFan"

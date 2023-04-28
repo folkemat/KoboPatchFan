@@ -114,7 +114,7 @@ class updateDb:
             return
 
         #Search for Array-Literal
-        match = re.search("return \[(.*)\],\n]", content, re.DOTALL)
+        match = re.search("return \[(.*)\],?\s*\n?", content, re.DOTALL)
         if not match:
             configSettings.log(self, "Error getRelevantData: Array literal not found")
             return
