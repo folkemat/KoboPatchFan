@@ -5,7 +5,7 @@ import os
 from configSettingsClass import configSettings
 from loadDataThreadClass import LoadDataThread
 from PyQt6.QtGui import QFont
-from PyQt6.QtWidgets import QLabel, QPlainTextEdit, QGroupBox, QPushButton, QVBoxLayout, QCheckBox, QTextEdit, QHBoxLayout, QWidget
+from PyQt6.QtWidgets import QLabel, QMessageBox, QPlainTextEdit, QGroupBox, QPushButton, QVBoxLayout, QCheckBox, QTextEdit, QHBoxLayout, QWidget
 from functools import partial
 import yaml
 from savedPatchesClass import savedPatches
@@ -176,7 +176,7 @@ class editor:
         file_path = self.whichFileToLoad()
         #Refresh tabs
         self.colorfulTabs(choosenTab)
-
+        self._view.tab_widget.save_label.setText("Note: Changes are automatically saved")
         #Processing the patch file
         try:
             if not os.path.isfile(file_path) or not file_path.endswith('.yaml'):
@@ -257,8 +257,10 @@ class editor:
                 if label in lines[i]:
                     if "Enabled: yes" in lines[i+1] and not state:
                         lines[i+1] = "  - Enabled: no\n"
+                        self._view.tab_widget.save_label.setText("Deactivated '"+label+"'")
                     elif "Enabled: no" in lines[i+1] and state:
                         lines[i+1] = "  - Enabled: yes\n"
+                        self._view.tab_widget.save_label.setText("Activated '"+label+"'")
                     break
                 i += 1
             
@@ -272,10 +274,22 @@ class editor:
     
     def deselect_checkboxes(self):
         # deselect all checkboxes
+        to_deselect = []
         for checkbox, groupbox, patch_group_text, number_of_patch in self.checkboxes:
             if checkbox.isChecked():
-                checkbox.setChecked(False) #to unchecked
-                self.checkbox_state_changed(checkbox, -1) #write change in file
+                to_deselect.append(checkbox)
+        if len(to_deselect) > 0:
+            file_path = self.whichFileToLoad()
+            filename = os.path.basename(file_path)
+            result = QMessageBox.warning(None, "Deselect options", "Are you sure you want to deselect "+str(len(to_deselect))+" options?\nIn: "+filename+"",
+                             QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.Cancel)
+            if result == QMessageBox.StandardButton.Yes:
+                for checkbox in to_deselect:
+                    checkbox.setChecked(False) #to unchecked
+                    self.checkbox_state_changed(checkbox, -1) #write change in file
+                self._view.tab_widget.save_label.setText("Succesfully deselected "+str(len(to_deselect))+ " options in "+filename+"")
+            else:
+                pass
 
     def openFolderSrc(self):
         try:
@@ -305,9 +319,10 @@ class editor:
         kobopatch_file_name = "kobopatch.yaml"
         kobopatch_unsave_file_path = os.path.join(app_folder, kobopatch_file_name)
         kobopatch_save_file_path = os.path.join(save_folder, kobopatch_file_name)
-        
+        num_backup = 0
         for checkbox, groupbox, patch_group_text, number_of_patch in self.checkboxes:
             if checkbox.isChecked():
+                num_backup = num_backup+1
                 try: 
                     target_option = checkbox.text()
 
@@ -330,15 +345,35 @@ class editor:
                         yaml.dump(data, f)
                 except Exception as e:
                     configSettings.log(self, "Error kobopatch.yaml: "+str(e))
+        self._view.tab_widget.save_label.setText("Backup of "+str(num_backup)+" patches completed, check the backup tab")
 
     def filter_checkboxes(self):
         # Die Sucheingabe des Benutzers abrufen
         search_text = self._view.tab_widget.search_edit.text().lower()
-        
+        found_num = 0
         # Alle Checkboxen durchgehen und nur noch passende anzeigen
         for checkbox, groupbox, patch_group_text, number_of_patch in self.checkboxes:
             label_text = checkbox.text().lower()
             if search_text in label_text:
                 groupbox.show()
+                found_num = found_num+1
             else:
                 groupbox.hide()
+        search_text_show = search_text
+        if len(search_text) == 0:
+            search_text_show = "*"
+        self._view.tab_widget.save_label.setText("Found "+str(found_num)+" options for search string '"+str(search_text_show)+"'")
+    
+    def show_selected_options(self):
+        selected_num = 0
+        for checkbox, groupbox, patch_group_text, number_of_patch in self.checkboxes:
+            is_selected = checkbox.isChecked()
+            if is_selected:
+                groupbox.show()
+                selected_num = selected_num+1
+            else:
+                groupbox.hide()
+        if selected_num == 0:
+            self._view.tab_widget.save_label.setText("Selected 0 options! Do a reload")
+        else:
+            self._view.tab_widget.save_label.setText("Selected "+str(selected_num)+" options")

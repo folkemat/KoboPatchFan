@@ -39,7 +39,6 @@ def _createEditor(self):
     shadow_effect.setBlurRadius(15)
     self.save_kobopatch_button.setGraphicsEffect(shadow_effect)
 
-    self.label_and_search_layout.addWidget(self.save_kobopatch_button)
 
     self.chkBoxLayout = QVBoxLayout()
     self.chkBoxLayout.addStretch(1) 
@@ -54,16 +53,19 @@ def _createEditor(self):
     self.scroll_area.setWidget(self.scroll_area_widget) 
     self.control_box = QGroupBox()
     self.control_box.setAlignment(Qt.AlignmentFlag.AlignCenter)
-    save_label = QLabel("Note: Changes are automatically saved")
+    self.save_label = QLabel("Note: Changes are automatically saved")
+    self.show_selected_button = QPushButton("Show only selected")
     self.reload_button = QPushButton("Reload")
-    self.deselect_button = QPushButton("Deselect All")
+    self.deselect_button = QPushButton("Deselect all")
     self.open_src_button = QPushButton("Open Folder")
 
     self.control_layout = QHBoxLayout()
-    self.control_layout.addWidget(save_label)
+    self.control_layout.addWidget(self.show_selected_button)
     self.control_layout.addWidget(self.reload_button)
+    self.control_layout.addWidget(self.save_kobopatch_button)
     self.control_layout.addWidget(self.deselect_button)
     self.control_layout.addWidget(self.open_src_button)
+
     self.control_box.setLayout(self.control_layout)
 
     # Create a QWidget to hold the editor widgets
@@ -73,6 +75,7 @@ def _createEditor(self):
     self.editor_layout.addLayout(self.label_and_search_layout)
     self.editor_layout.addWidget(self.scroll_area)
     self.editor_layout.addWidget(self.control_box)
+    self.editor_layout.addWidget(self.save_label)
 
     """Add QTabWidget TO tab2-layout"""
     self.tab2.layout.addWidget(self.tab_buttons_widget)

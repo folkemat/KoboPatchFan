@@ -66,15 +66,16 @@ class kpController(QObject):
         #editor stuff
         self._view.tab_widget.reload_button.clicked.connect(partial(self.editor.reloadFile))
         self._view.tab_widget.search_edit.textChanged.connect(partial(self.editor.filter_checkboxes))
+        self._view.tab_widget.deselect_button.clicked.connect(partial(self.editor.deselect_checkboxes))
+        self._view.tab_widget.open_src_button.clicked.connect(partial(self.editor.openFolderSrc))
+        self._view.tab_widget.save_kobopatch_button.clicked.connect(partial(self.editor.save_kobopatch))
+        self._view.tab_widget.show_selected_button.clicked.connect(partial(self.editor.show_selected_options))
         #editor tabs
         self._view.tab_widget.tab1_button.clicked.connect(lambda: self.editor.switchTab(0))
         self._view.tab_widget.tab2_button.clicked.connect(lambda: self.editor.switchTab(1))
         self._view.tab_widget.tab3_button.clicked.connect(lambda: self.editor.switchTab(2))
         self._view.tab_widget.tab4_button.clicked.connect(lambda: self.editor.switchTab(3))
         self._view.tab_widget.tabs.currentChanged.connect(partial(self.check_current_tab))
-        self._view.tab_widget.deselect_button.clicked.connect(partial(self.editor.deselect_checkboxes))
-        self._view.tab_widget.open_src_button.clicked.connect(partial(self.editor.openFolderSrc))
-        self._view.tab_widget.save_kobopatch_button.clicked.connect(partial(self.editor.save_kobopatch))
         #gen stuff
         self._view.tab_widget.run_button.clicked.connect(partial(self.generator.runScript))
         self._view.tab_widget.open_folder_button.clicked.connect(partial(self.generator.openFolderOut))
