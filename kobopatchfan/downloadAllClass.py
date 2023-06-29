@@ -9,6 +9,7 @@ from downloadThreadClass import DownloadThread
 from extractThreadClass import ExtractThread
 from updateDbClass import updateDb
 from checkerClass import checkerClass
+from PyQt6.QtWidgets import QLabel, QMessageBox
 
 class downloadAllClass:
     def __init__(self, settings, view):
@@ -20,7 +21,19 @@ class downloadAllClass:
         self.patchFileName = "Unknown"
         self.checker = checkerClass(settings, view)
 
+    def security_question(self):
+        firmwareVersion = configSettings.getSetting(self, "kobo_this_version")
+        koboDevice = configSettings.getSetting(self, "kobo_device")
+        result = QMessageBox.question(None, "Confirm configuration", "Kobo: "+koboDevice+"\nFirmware: "+firmwareVersion+"\n\nIs the above configuration correct?",
+                             QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.Cancel)
+        if result == QMessageBox.StandardButton.Yes:
+            return True
+        else:
+            return False
+
     def startButton(self):
+        if not self.security_question():
+            return
         dbConfigs = self.readDbConfig()
         if dbConfigs:
             targetUrls = self.createDownloadLink(dbConfigs)

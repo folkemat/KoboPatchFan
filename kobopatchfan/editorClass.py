@@ -365,6 +365,8 @@ class editor:
         self._view.tab_widget.save_label.setText("Found "+str(found_num)+" options for search string '"+str(search_text_show)+"'")
     
     def show_selected_options(self):
+        file_path = self.whichFileToLoad()
+        filename = os.path.basename(file_path)
         selected_num = 0
         for checkbox, groupbox, patch_group_text, number_of_patch in self.checkboxes:
             is_selected = checkbox.isChecked()
@@ -374,6 +376,6 @@ class editor:
             else:
                 groupbox.hide()
         if selected_num == 0:
-            self._view.tab_widget.save_label.setText("Selected 0 options! Do a reload")
+            self._view.tab_widget.save_label.setText("Selected 0 options in "+filename+"! Do a reload")
         else:
-            self._view.tab_widget.save_label.setText("Selected "+str(selected_num)+" options")
+            self._view.tab_widget.save_label.setText("Show "+str(selected_num)+" selected options in "+filename+"")
