@@ -263,16 +263,17 @@ class generator:
 
                 for file_name_save in overrides_save:
                     options_save = overrides_save.get(file_name_save)
-                    for file_name_unsave in overrides_unsave:
-                        if file_name_unsave in file_name_save:
-                            options_unsave = overrides_unsave.get(file_name_unsave)
-                            for option in options_save:
-                                if not options_unsave:
-                                    options_unsave = {}
-                                    options_unsave[option] = options_save[option]
-                                    overrides_unsave[file_name_unsave] = options_unsave
-                                else:
-                                    options_unsave[option] = options_save[option] 
+                    if options_save is not None:
+                        for file_name_unsave in overrides_unsave:
+                            if file_name_unsave in file_name_save:
+                                options_unsave = overrides_unsave.get(file_name_unsave)
+                                for option in options_save:
+                                    if not options_unsave:
+                                        options_unsave = {}
+                                        options_unsave[option] = options_save[option]
+                                        overrides_unsave[file_name_unsave] = options_unsave
+                                    else:
+                                        options_unsave[option] = options_save[option] 
 
                 with open(kobopatch_unsave_file_path, 'w', encoding='utf-8') as f:
                     yaml.dump(data_unsave, f)
