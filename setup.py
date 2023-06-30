@@ -14,7 +14,7 @@ linux_name = "KoboPatchFan"
 
 # Specify the application name and version
 APP_NAME = "KoboPatchFan"
-APP_VERSION = "1.1.0"
+APP_VERSION = "1.2.1"
 
 
 build_exe_options = {
