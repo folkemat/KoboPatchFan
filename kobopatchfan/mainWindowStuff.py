@@ -13,7 +13,7 @@ from updateDbWindow import _createUpdateDb
 from editorWindow import _createEditor
 from genWindow import _createGenerator
 from savedPatchesWindow import _createSavedPatches
-__version__ = '1.1.0'
+__version__ = '1.2.0'
 
 class KoboPatchFanUi(QMainWindow):
   """KoboPatchFan's view (GUI)."""
@@ -50,7 +50,7 @@ class mainTabs(QWidget):
     self.tabs.addTab(self.tab1, "(1) Download")
     self.tabs.addTab(self.tab2, "(2) Select patches")
     self.tabs.addTab(self.tab3, "(3) Generate patch")
-    self.tabs.addTab(self.tab4, "Backup-Patches")
+    self.tabs.addTab(self.tab4, "Backup patches")
     self.tabs.addTab(self.tab5, "Settings")
 
     # Change font size of tabs
@@ -103,7 +103,7 @@ class mainTabs(QWidget):
     help_box4 = QGroupBox()
     self.tab4.layout.addWidget(help_box4)
     # Add Help label to third tab's groupbox
-    self.help_label4 = QLabel("The options here <b>survive</b> downloading new versions, so you don't have to select them again. To <b>add</b> a new option, click on <b>'Backup selection'</b> in tab (2). To <b>use</b> it, select <b>'Use Backup-Patches'</b> in tab (3).")
+    self.help_label4 = QLabel("The options here <b>survive</b> downloading new versions, so you don't have to select them again. To <b>add</b> a new option, click on <b>'Backup selection'</b> in tab (2). To <b>use</b> it, select <b>'Use backup patches'</b> in tab (3).")
     self.help_label4.setWordWrap(True)
     help_box4_layout = QVBoxLayout()
     help_box4_layout.addWidget(self.help_label4)
@@ -142,7 +142,7 @@ class mainTabs(QWidget):
     self.about_label.setStyleSheet('background-color: white;border: 2px solid gray;')
     info_box1 = QGroupBox()
     info_label = QTextEdit()
-    info_label.setPlainText("KoboPatchFan "+str(__version__)+" by Tommalka\n\nA GUI application written in PyQt6 for downloading, configuring and generating Kobo patches. \n\nKobopatch is an patching system for Kobo eReaders by pgaskin. See https://www.mobileread.com/forums/showthread.php?t=297338 for more infos.\n\nIf you prefer manual downloads, go to https://pgaskin.net/kobopatch-patches/")
+    info_label.setPlainText("KoboPatchFan "+str(__version__)+" by Tommalka\n(https://github.com/folkemat/KoboPatchFan)\n\nA GUI application written in PyQt6 for downloading, configuring and generating Kobo patches. \n\nKobopatch is an patching system for Kobo eReaders by pgaskin. See https://www.mobileread.com/forums/showthread.php?t=297338 for more infos.\n\nIf you prefer manual downloads, go to https://pgaskin.net/kobopatch-patches/")
     info_label.document().setDefaultTextOption(QTextOption(Qt.AlignmentFlag.AlignCenter))
     info_label.setReadOnly(True)
     info_box1_layout = QVBoxLayout()

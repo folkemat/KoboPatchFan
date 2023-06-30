@@ -80,6 +80,7 @@ class kpController(QObject):
         self._view.tab_widget.run_button.clicked.connect(partial(self.generator.runScript))
         self._view.tab_widget.open_folder_button.clicked.connect(partial(self.generator.openFolderOut))
         self._view.tab_widget.export_button.clicked.connect(partial(self.generator.doTheExport))
+        self._view.tab_widget.show_all_patches_gen.clicked.connect(partial(self.generator.show_info_dialog))
         #saved patches stuff
         self._view.tab_widget.kobopatch_reload_button.clicked.connect(partial(self.savedPatches.loadKobopatchFile))
         self._view.tab_widget.kobopatch_remove_all_button.clicked.connect(partial(self.savedPatches.kobopatch_remove_all))

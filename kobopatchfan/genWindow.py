@@ -1,5 +1,3 @@
-# Filename: editorWindow.py
-
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import (QPushButton, QVBoxLayout, QHBoxLayout,
                              QGroupBox, QPlainTextEdit, QCheckBox)
@@ -12,15 +10,20 @@ def _createGenerator(self):
     self.gen_plainTextEdit.setReadOnly(True)
     self.gen_plainTextEdit.setPlaceholderText("The output will appear here ...")
 
-    self.use_kobopatch_checkbox = QCheckBox("Use Backup-Patches")
+    self.use_kobopatch_checkbox = QCheckBox("Use backup patches")
+    self.show_all_patches_gen = QPushButton('Show all selected patches')
 
     self.run_button = QPushButton('Run')
     self.run_button.setFixedHeight(50)
     self.run_button.setFixedWidth(200)
 
     self.gen_layout = QVBoxLayout()
-    #self.gen_layout.addWidget(saved_patches_groupbox)
-    self.gen_layout.addWidget(self.use_kobopatch_checkbox)
+
+    hbox = QHBoxLayout()
+    hbox.addWidget(self.use_kobopatch_checkbox)
+    hbox.addWidget(self.show_all_patches_gen)
+
+    self.gen_layout.addLayout(hbox)
     self.gen_layout.addWidget(self.gen_plainTextEdit)
     self.gen_layout.addWidget(self.run_button, 0, Qt.AlignmentFlag.AlignHCenter)
     self.genGroupBox.setLayout(self.gen_layout)

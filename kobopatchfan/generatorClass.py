@@ -6,12 +6,32 @@ import os
 import platform
 from configSettingsClass import configSettings
 from processThreadClass import ProcessThread
+from loadDataThreadClass import LoadDataThread
 from checkerClass import checkerClass
 from PyQt6.QtGui import QTextCursor
-from PyQt6.QtWidgets import QFileDialog
+from PyQt6.QtWidgets import QFileDialog, QTextEdit, QVBoxLayout, QDialog, QPushButton
 import shutil
 import yaml
 import re
+
+class ScrollableTextDialog(QDialog):
+    def __init__(self, text):
+        super().__init__()
+        self.setWindowTitle("All activated patches")
+        
+        text_edit = QTextEdit()
+        text_edit.setHtml(text)
+        text_edit.setReadOnly(True)
+        text_edit.setLineWrapMode(QTextEdit.LineWrapMode.WidgetWidth)
+
+        layout = QVBoxLayout()
+        layout.addWidget(text_edit)
+
+        ok_button = QPushButton("Close")
+        ok_button.clicked.connect(self.accept)
+        layout.addWidget(ok_button)
+
+        self.setLayout(layout)
 
 class generator:
     def __init__(self, settings, view):
@@ -20,6 +40,32 @@ class generator:
         self._view = view
         self._process = None
         self.process_success = False
+    
+    def show_info_dialog(self):
+        homePath = str(configSettings(self._settings).app_folder)
+        self.load_thread = LoadDataThread(homePath, 2)
+        self.load_thread.finish_all_patches.connect(self.show_all_patches)
+        self.load_thread.start()
+
+    def show_all_patches(self, all_patches):
+        numberOfPatch = 0
+        count = 0
+        msg_text = ""
+        try:
+            for patch in all_patches:
+                numberOfPatch += 1
+                patch_name = patch[0]
+                patch_state = patch[1]
+                filename = patch[2]
+                if patch_state:
+                    count = count+1
+                    msg_text += f"No. {numberOfPatch}: <b>{patch_name}</b> (in {filename})<br><br>"
+        except Exception as e:
+                configSettings.log(self, "Error show_all_patches: "+str(e))
+
+        scrollable_text = f"<html><body>You have activated <b>{str(count)}</b> patches:<br><br>{msg_text}</body></html>"
+        dialog = ScrollableTextDialog(scrollable_text)
+        dialog.exec()
 
     def runScript(self):
         homePath = str(configSettings(self._settings).app_folder)
