@@ -75,11 +75,14 @@ class LoadDataThread(QThread):
             ]
             
             all_data = {}
-            for file_path in file_paths:
-                with open(file_path, encoding='utf-8') as file:
-                    lines = file.readlines()
-                data = yaml.safe_load(''.join(lines))
-                all_data[file_path] = data
+            try:
+                for file_path in file_paths:
+                    with open(file_path, encoding='utf-8') as file:
+                        lines = file.readlines()
+                    data = yaml.safe_load(''.join(lines))
+                    all_data[file_path] = data
+            except Exception as e:
+                configSettings.log(self, "Error: Could not open .yaml file: "+str(e))
             
             all_patches = []
             for file_path, data in all_data.items():
