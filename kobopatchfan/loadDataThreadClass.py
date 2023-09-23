@@ -98,7 +98,7 @@ class LoadDataThread(QThread):
         i = 0
         more_text = ""
         while i < len(lines):
-            if patch_name in lines[i]:
+            if (patch_name in lines[i]) and not (lines[i].startswith('#') or lines[i].startswith(' ')): #check if patch-name is not a comment
                 for j in range(i+1, len(lines)): 
                     if lines[j].startswith(' ') or lines[j].startswith('#') or len(lines[j].strip()) == 0: #A new patch block starts without spaces etc.
                         more_text += lines[j]

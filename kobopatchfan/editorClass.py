@@ -243,7 +243,7 @@ class editor:
     
     def checkbox_state_changed(self, checkbox, index):
         #change the file according to checkbox state
-        label = checkbox.text()
+        label = checkbox.text() #label = patch name
         state = checkbox.isChecked()
         file_path = self.whichFileToLoad()
         try:
@@ -254,7 +254,7 @@ class editor:
             #Finding the lines that need to be updated
             i = 0
             while i < len(lines):
-                if label in lines[i]:
+                if (label in lines[i]) and not (lines[i].startswith('#') or lines[i].startswith(' ')): 
                     if "Enabled: yes" in lines[i+1] and not state:
                         lines[i+1] = "  - Enabled: no\n"
                         self._view.tab_widget.save_label.setText("Deactivated '"+label+"'")
