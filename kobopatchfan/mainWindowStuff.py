@@ -13,7 +13,7 @@ from updateDbWindow import _createUpdateDb
 from editorWindow import _createEditor
 from genWindow import _createGenerator
 from savedPatchesWindow import _createSavedPatches
-__version__ = '1.2.1'
+__version__ = '1.2.2'
 
 class KoboPatchFanUi(QMainWindow):
   """KoboPatchFan's view (GUI)."""
