@@ -63,11 +63,15 @@ class updateDb:
         latestDate = self.getRelevantData(1)
         self._view.tab_widget.labelUpdateDbLatest.setText("Latest firmware from: "+str(latestDate))
         self._view.tab_widget.labelUpdateDbLatest.setStyleSheet('color:green; font-weight:bold')
-        #fill the combo firmware box
+        #fill the combo firmware box, pick the latest version
         versionList = self.getRelevantData(0)
         if versionList:
             self._view.tab_widget.comboVersions.clear()
             self._view.tab_widget.comboVersions.addItems(versionList)
+            last_index = self._view.tab_widget.comboVersions.count() - 1
+            last_item = self._view.tab_widget.comboVersions.itemText(last_index)
+            self._view.tab_widget.comboVersions.setCurrentIndex(last_index)
+            configSettings.setSetting(self, "kobo_this_version", last_item)
 
     #download the kfw.db and connect to parse the content
     def downloadDb(self):

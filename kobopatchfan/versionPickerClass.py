@@ -55,3 +55,4 @@ class versionPicker:
         if versionList:
             self._view.tab_widget.comboVersions.clear()
             self._view.tab_widget.comboVersions.addItems(versionList)
+            self.pick_latest_version()
