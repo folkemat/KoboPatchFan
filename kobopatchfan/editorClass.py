@@ -200,24 +200,21 @@ class editor:
         checkbox = QCheckBox(checkbox_label)
         checkbox.setChecked(checkbox_state)
         checkbox.stateChanged.connect(partial(self.checkbox_state_changed, checkbox)) #connect all checkboxes
-        
+            
         #fancy new font
         current_font = checkbox.font()
         current_size = current_font.pointSize()
         new_font = QFont(current_font.family(), current_size + 1, QFont.Weight.Bold)
         checkbox.setFont(new_font)
 
-        #desc box under checkbox
-        desc_text_edit = QTextEdit(desc_text)
-        desc_text_edit.setReadOnly(True)
-        #desc_text_edit.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-        desc_text_layout = QVBoxLayout()  
-        desc_text_layout.addWidget(desc_text_edit)
-        desc_text_layout.setContentsMargins(0, 0, 0, 0)
-        desc_text_layout.addWidget(QWidget(), stretch=1)
+        # desc box under checkbox
+        desc_label = QLabel(desc_text)
+        desc_label.setWordWrap(True)
+        desc_label.setStyleSheet("background-color: white;")
 
         #open edit mode button under desc
-        more_button = QPushButton("Open Edit Mode")
+        more_button = QPushButton("Edit")
+        more_button.setFixedSize(50, 25) 
         more_button.clicked.connect(partial(self.createMoreMenu, checkbox_label, checkbox, desc_text, more_text))
         
         #label above checkbox for checkbox
@@ -227,10 +224,15 @@ class editor:
         #layout things
         groupbox = QGroupBox()
         groupbox_layout = QVBoxLayout()
-        groupbox_layout.addWidget(group_label)
+        
+        # Horizontal layout for checkbox label and button
+        hbox_layout = QHBoxLayout()
+        hbox_layout.addWidget(group_label)
+        hbox_layout.addWidget(more_button)
+        groupbox_layout.addLayout(hbox_layout)
+        
         groupbox_layout.addWidget(checkbox)
-        groupbox_layout.addLayout(desc_text_layout)
-        groupbox_layout.addWidget(more_button)
+        groupbox_layout.addWidget(desc_label)
         groupbox.setLayout(groupbox_layout)
         
         #inset into layout
