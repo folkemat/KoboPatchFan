@@ -158,14 +158,15 @@ class updateDb:
             versionList = []
             for sublist in data:
                 for element in sublist:
-                    if koboVersion in element:
-                        versionList.append(sublist[2])
-                        break
+                    if "dd+" in element:
+                        if koboVersion in element:
+                            versionList.append(sublist[2])
+                            break
         except Exception as e:
             configSettings.log(self, "Error getRelevantData 2: An unexpected error occurred: "+str(e))
             return
         return versionList
-
+    
     def fileExistence(self):
         path = str(configSettings(self._settings).app_folder)
         kfwFilename = "kfw.js"
