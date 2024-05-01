@@ -184,7 +184,8 @@ class downloadAllClass:
         dh = dbConfig[0]
         dk = dbConfig[1]
         da = dbConfig[2]
-        patchLinkList = dbConfig[3]
+        dn = dbConfig[3]
+        patchLinkList = dbConfig[4]
         firmwareLink = "Unknown"
         patchLink = "Unknown"
         data = updateDb.getRelevantData(self, 2)
@@ -216,8 +217,10 @@ class downloadAllClass:
             firmwareLink = firmwareLink.replace('dk+"', dk+""+dh)
         elif "da+" in firmwareLink:
             firmwareLink = firmwareLink.replace('da+"', da+""+dh)
+        elif "dn+" in firmwareLink:
+            firmwareLink = firmwareLink.replace('dn+"', dn+""+dh)
         else:
-            configSettings.log(self, "Error: Could not really read firmware link, dk and da missing")
+            configSettings.log(self, "Error: Could not really read firmware link, dk or da or dn missing")
             return
         configSettings.log(self, "Firmware URL: "+firmwareLink)
 
@@ -254,26 +257,41 @@ class downloadAllClass:
         dh_pattern = r'var\s+dh\s*=\s*"([^"]+)"'
         dk_pattern = r'var\s+dk\s*=\s*"([^"]+)"'
         da_pattern = r'var\s+da\s*=\s*"([^"]+)"'
+        dn_pattern = r'var\s+dn\s*=\s*"([^"]+)"'
+       
+        # dh #
         dh_match = re.search(dh_pattern, source)
         if dh_match:
             dh = dh_match.group(1)
+            configSettings.log(self, "readDbConfig: Found value for 'dh'")
         else:
             configSettings.log(self, "readDbConfig: Error: could not find value for variable 'dh'")
             return
-
+        # dk #
         dk_match = re.search(dk_pattern, source)
         if dk_match:
             dk = dk_match.group(1)
+            configSettings.log(self, "readDbConfig: Found value for 'dk'")
         else:
             configSettings.log(self, "readDbConfig: Error: could not find value for variable 'dk'")
             return
-
+        # da #
         da_match = re.search(da_pattern, source)
         if da_match:
             da = da_match.group(1)
+            configSettings.log(self, "readDbConfig: Found value for 'da'")
         else:
             configSettings.log(self, "readDbConfig: Error: could not find value for variable 'da'")
             return
+        # dn #
+        dn_match = re.search(dn_pattern, source)
+        if dn_match:
+            dn = dn_match.group(1)
+            configSettings.log(self, "readDbConfig: Found value for 'dn'")
+        else:
+            configSettings.log(self, "readDbConfig: Error: could not find value for variable 'dn'")
+            return
+            
         configSettings.log(self, "Successfully executed readDbConfig and assigned variables")
 
         patchPath = str(configSettings(self._settings).app_folder)
@@ -290,7 +308,7 @@ class downloadAllClass:
             configSettings.log(self, "Successfully parsed patches.json for creating download link")
         except Exception as e:
             configSettings.log(self, "Error parsing patches.json for creating download link: "+str(e))
-        return dh, dk, da, linkList
+        return dh, dk, da, dn, linkList
 
     def pause_resume(self):
         if self.download_firmware_thread.pause_flag:
