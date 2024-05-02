@@ -217,7 +217,7 @@ class editor:
             desc_text = desc_text[:-1]
         desc_label.setText(desc_text)
 
-        #open edit mode button under desc
+        #open edit mode button
         more_button = QPushButton("Edit")
         more_button.setFixedSize(50, 25) 
         more_button.clicked.connect(partial(self.createMoreMenu, checkbox_label, checkbox, desc_text, more_text))

@@ -103,7 +103,7 @@ class mainTabs(QWidget):
     help_box4 = QGroupBox()
     self.tab4.layout.addWidget(help_box4)
     # Add Help label to third tab's groupbox
-    self.help_label4 = QLabel("The options here <b>survive</b> downloading new versions, so you don't have to select them again. To <b>add</b> a new option, click on <b>'Backup selection'</b> in tab (2). To <b>use</b> it, select <b>'Use backup patches'</b> in tab (3).")
+    self.help_label4 = QLabel("The options here <b>survive</b> downloading new versions, so you don't have to select them again. To <b>add</b> a new option, click on <b>'Backup selection'</b> in tab (2). To <b>use</b> it, select <b>'Include backup patches'</b> in tab (3).")
     self.help_label4.setWordWrap(True)
     help_box4_layout = QVBoxLayout()
     help_box4_layout.addWidget(self.help_label4)

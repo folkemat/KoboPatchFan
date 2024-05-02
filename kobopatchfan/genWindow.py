@@ -10,7 +10,7 @@ def _createGenerator(self):
     self.gen_plainTextEdit.setReadOnly(True)
     self.gen_plainTextEdit.setPlaceholderText("The output will appear here ...")
 
-    self.use_kobopatch_checkbox = QCheckBox("Use backup patches")
+    self.use_kobopatch_checkbox = QCheckBox("Include backup patches")
     self.show_all_patches_gen = QPushButton('Show all selected patches')
 
     self.run_button = QPushButton('Run')
