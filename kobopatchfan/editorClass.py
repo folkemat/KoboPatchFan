@@ -208,9 +208,13 @@ class editor:
         checkbox.setFont(new_font)
 
         # desc box under checkbox
-        desc_label = QLabel(desc_text)
+        desc_label = QLabel()
         desc_label.setWordWrap(True)
         desc_label.setStyleSheet("background-color: white;")
+        desc_label.setTextInteractionFlags(Qt.TextInteractionFlag.TextBrowserInteraction)
+        if desc_text.endswith('\n'):
+            desc_text = desc_text[:-1]
+        desc_label.setText(desc_text)
 
         #open edit mode button under desc
         more_button = QPushButton("Edit")
@@ -234,7 +238,7 @@ class editor:
         groupbox_layout.addWidget(checkbox)
         groupbox_layout.addWidget(desc_label)
         groupbox.setLayout(groupbox_layout)
-        
+                
         #inset into layout
         last_index = self._view.tab_widget.chkBoxLayout.count() 
         self._view.tab_widget.chkBoxLayout.insertWidget(last_index, groupbox)
@@ -269,6 +273,7 @@ class editor:
             # Write the updated lines back to the file
             with open(file_path, "w", encoding="utf-8") as f:
                 f.writelines(lines)
+
         except Exception as e:
             self._view.tab_widget.label_edit_filename.setText("Error: Cannot change checkbox state!")
             configSettings.log(self, "Error: Cannot change checkbox state: "+str(e))
@@ -350,10 +355,10 @@ class editor:
         self._view.tab_widget.save_label.setText("Backup of "+str(num_backup)+" patches completed, check the backup tab")
 
     def filter_checkboxes(self):
-        # Die Sucheingabe des Benutzers abrufen
+        # Retrieve the user's search input
         search_text = self._view.tab_widget.search_edit.text().lower()
         found_num = 0
-        # Alle Checkboxen durchgehen und nur noch passende anzeigen
+        # Go through all checkboxes and only show matching ones
         for checkbox, groupbox, patch_group_text, number_of_patch in self.checkboxes:
             label_text = checkbox.text().lower()
             if search_text in label_text:
