@@ -5,6 +5,7 @@ import os
 from configSettingsClass import configSettings
 from loadDataThreadClass import LoadDataThread
 from PyQt6.QtGui import QFont
+from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QLabel, QMessageBox, QPlainTextEdit, QGroupBox, QPushButton, QVBoxLayout, QCheckBox, QTextEdit, QHBoxLayout, QWidget
 from functools import partial
 import yaml
