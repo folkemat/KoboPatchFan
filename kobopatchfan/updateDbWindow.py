@@ -23,7 +23,7 @@ def _createUpdateDb(self):
     self.labelUpdateDbStatus.setWordWrap(True)
 
     self.labelUpdateDbLastTime = QLabel()
-    self.labelUpdateDbLastTime.setText("Click Update to update the database.")
+    self.labelUpdateDbLastTime.setText("You may need to update the database.")
     self.labelUpdateDbLastTime.setWordWrap(True)
 
     self.labelUpdateDbLatest = QLabel()
@@ -33,6 +33,7 @@ def _createUpdateDb(self):
 
     """Create and add the Buttons to the box"""
     self.buttonUpdateDb = QPushButton('Update database')
+    self.buttonUpdateDb.setFixedHeight(35)
 
     # adding one by one
     vbox.addWidget(self.labelUpdateDb)

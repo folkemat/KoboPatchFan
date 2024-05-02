@@ -100,6 +100,7 @@ class generator:
         self._view.tab_widget.gen_plainTextEdit.insertPlainText(f"Execution of {file_name} started ...\n")
         configSettings.log(self, "Started execution of run script")
         self._view.tab_widget.run_button.setEnabled(False)
+        self._view.tab_widget.run_button.setText("Running ...")
 
     def on_ready_read(self, output):
         data_str = output
@@ -123,6 +124,7 @@ class generator:
         self._view.tab_widget.gen_plainTextEdit.moveCursor(QTextCursor.MoveOperation.End)
         self._view.tab_widget.gen_plainTextEdit.ensureCursorVisible()
         self._view.tab_widget.run_button.setEnabled(True)
+        self._view.tab_widget.run_button.setText("Run")
         #if process finished successfully, show export options
         self.showExport()
 

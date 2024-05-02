@@ -18,8 +18,9 @@ def _createVersionPicker(self):
       self.labelVersionSelected = QLabel()
 
       """Create and add the Buttons to the box"""
-      self.buttonUpdateVersions = QPushButton("Re-read versions")
-      self.buttonPickLatest = QPushButton("Pick latest")
+      #self.buttonUpdateVersions = QPushButton("Re-read versions")
+      self.buttonPickLatest = QPushButton("Pick latest version")
+      self.buttonPickLatest.setFixedHeight(35)
 
       """Create and add the combo to the box"""
       self.comboVersions = QComboBox(self)
@@ -31,7 +32,7 @@ def _createVersionPicker(self):
       vbox.addWidget(self.comboVersions)
       hbox = QHBoxLayout()
       vbox.addLayout(hbox)
-      hbox.addWidget(self.buttonUpdateVersions)
+      #hbox.addWidget(self.buttonUpdateVersions)
       hbox.addWidget(self.buttonPickLatest)
 
       self.left_half.addWidget(self.generalVersionBox)

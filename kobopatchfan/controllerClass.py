@@ -50,7 +50,7 @@ class kpController(QObject):
         self._view.tab_widget.combo.currentIndexChanged.connect(self.specifications_picker.confirmKobo)
         self._view.tab_widget.combo.currentIndexChanged.connect(partial(self.version_picker.buttonUpdateVersions))
         #Version picker stuff
-        self._view.tab_widget.buttonUpdateVersions.clicked.connect(partial(self.version_picker.buttonUpdateVersions))
+        #self._view.tab_widget.buttonUpdateVersions.clicked.connect(partial(self.version_picker.buttonUpdateVersions))
         self._view.tab_widget.comboVersions.activated.connect(partial(self.version_picker.comboVersions))
         self._view.tab_widget.comboVersions.currentIndexChanged.connect(partial(self.version_picker.confirmVersions))
         self._view.tab_widget.buttonPickLatest.clicked.connect(partial(self.version_picker.pick_latest_version))

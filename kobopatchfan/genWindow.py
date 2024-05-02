@@ -1,7 +1,7 @@
 from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QColor
 from PyQt6.QtWidgets import (QPushButton, QVBoxLayout, QHBoxLayout,
-                             QGroupBox, QPlainTextEdit, QCheckBox)
-
+                             QGroupBox, QPlainTextEdit, QCheckBox, QGraphicsDropShadowEffect)
 def _createGenerator(self):
     
     self.genGroupBox = QGroupBox()
@@ -16,6 +16,13 @@ def _createGenerator(self):
     self.run_button = QPushButton('Run')
     self.run_button.setFixedHeight(50)
     self.run_button.setFixedWidth(200)
+
+    # create QGraphicsDropShadowEffect
+    shadow_effect = QGraphicsDropShadowEffect(self)
+    shadow_effect.setColor(QColor("#FF8C00"))
+    shadow_effect.setOffset(0, 0)
+    shadow_effect.setBlurRadius(15)
+    self.run_button.setGraphicsEffect(shadow_effect)
 
     self.gen_layout = QVBoxLayout()
 

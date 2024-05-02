@@ -23,9 +23,13 @@ def _createSavedPatches(self):
 
     # Controls
     self.kobopatch_reload_button = QPushButton("Reload")
+    self.kobopatch_reload_button.setFixedHeight(35)
     self.kobopatch_deactivate_all_button = QPushButton("Disable All")
+    self.kobopatch_deactivate_all_button.setFixedHeight(35)
     self.kobopatch_activate_all_button = QPushButton("Enable All")
+    self.kobopatch_activate_all_button.setFixedHeight(35)
     self.kobopatch_remove_all_button = QPushButton("Remove all")
+    self.kobopatch_remove_all_button.setFixedHeight(35)
     self.savedkobopatch_controlsLayout = QHBoxLayout()
     self.savedkobopatch_controlsLayout.addWidget(self.kobopatch_reload_button)
     self.savedkobopatch_controlsLayout.addStretch()  # add stretchable space to center the buttons

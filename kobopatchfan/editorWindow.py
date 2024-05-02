@@ -31,14 +31,14 @@ def _createEditor(self):
     self.search_edit.setPlaceholderText("Search ...")
     self.label_and_search_layout.addWidget(self.search_edit)
     self.save_kobopatch_button = QPushButton("Backup selection")
+    self.save_kobopatch_button.setFixedHeight(35)
+
     # create QGraphicsDropShadowEffect
-    shadow_effect = QGraphicsDropShadowEffect()
-    shadow_effect.setBlurRadius(10)
+    shadow_effect = QGraphicsDropShadowEffect(self)
     shadow_effect.setColor(QColor("#FF8C00"))
     shadow_effect.setOffset(0, 0)
     shadow_effect.setBlurRadius(15)
     self.save_kobopatch_button.setGraphicsEffect(shadow_effect)
-
 
     self.chkBoxLayout = QVBoxLayout()
     self.chkBoxLayout.addStretch(1) 
@@ -55,9 +55,13 @@ def _createEditor(self):
     self.control_box.setAlignment(Qt.AlignmentFlag.AlignCenter)
     self.save_label = QLabel("Note: Changes are automatically saved")
     self.show_selected_button = QPushButton("Show only selected")
+    self.show_selected_button.setFixedHeight(35)
     self.reload_button = QPushButton("Reload")
+    self.reload_button.setFixedHeight(35)
     self.deselect_button = QPushButton("Deselect all")
+    self.deselect_button.setFixedHeight(35)
     self.open_src_button = QPushButton("Open Folder")
+    self.open_src_button.setFixedHeight(35)
 
     self.control_layout = QHBoxLayout()
     self.control_layout.addWidget(self.show_selected_button)

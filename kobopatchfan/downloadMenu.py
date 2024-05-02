@@ -28,7 +28,9 @@ def _createDownload(self):
 
     """Create and add the Buttons to the box"""
     self.buttonDownloadPauseResume = QPushButton("Pause")
+    self.buttonDownloadPauseResume.setFixedHeight(35)
     self.buttonDownloadCancel = QPushButton("Cancel")
+    self.buttonDownloadCancel.setFixedHeight(35)
     self.buttonDownloadCancel.setEnabled(False)
     self.buttonDownloadPauseResume.setEnabled(False)
 
@@ -49,9 +51,9 @@ def _createDownload(self):
     self.progress_bar.setValue(0)
 
     self.downloadStart_button = QPushButton("Start")
+    self.downloadStart_button.setFixedHeight(35)
     # create QGraphicsDropShadowEffect
-    shadow_effect = QGraphicsDropShadowEffect()
-    shadow_effect.setBlurRadius(10)
+    shadow_effect = QGraphicsDropShadowEffect(self)
     shadow_effect.setColor(QColor("#FF8C00"))
     shadow_effect.setOffset(0, 0)
     shadow_effect.setBlurRadius(15)
