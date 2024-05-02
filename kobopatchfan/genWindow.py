@@ -50,6 +50,7 @@ def _createGenerator(self):
 
     self.export_button = QPushButton('Export File')
     self.export_button.setEnabled(False)
+    self.export_button.setStyleSheet("color: gray;")
     self.export_button.setFixedHeight(50)
     self.export_button.setFixedWidth(100)
 

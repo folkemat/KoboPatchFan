@@ -33,6 +33,8 @@ def _createDownload(self):
     self.buttonDownloadCancel.setFixedHeight(35)
     self.buttonDownloadCancel.setEnabled(False)
     self.buttonDownloadPauseResume.setEnabled(False)
+    self.buttonDownloadPauseResume.setStyleSheet("color: gray;")
+    self.buttonDownloadCancel.setStyleSheet("color: gray;")
 
     self.checkBoxExtract = QCheckBox(self)
     self.checkBoxExtract.setEnabled(True)

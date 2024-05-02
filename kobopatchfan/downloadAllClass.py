@@ -62,17 +62,23 @@ class downloadAllClass:
         self.download_firmware_thread.size.connect(self.size)
         self.download_firmware_thread.start()
         self._view.tab_widget.downloadStart_button.setEnabled(False)
+        self._view.tab_widget.downloadStart_button.setStyleSheet("color: gray;")
         self._view.tab_widget.downloadStart_button.setText("Downloading (1/2)...")
         self._view.tab_widget.buttonDownloadCancel.setEnabled(True)
         self._view.tab_widget.buttonDownloadPauseResume.setEnabled(True)
+        self._view.tab_widget.buttonDownloadCancel.setStyleSheet("color: black;")
+        self._view.tab_widget.buttonDownloadPauseResume.setStyleSheet("color: black;")
         self._view.tab_widget.labelDownloadInfo.setText("Downloading firmware files (1/2) ...")
     
     def firmware_download_finished(self, filename):
         self.firmwareFileName = filename #safe the name for later
         configSettings.log(self, "Download firmware finished")
         self._view.tab_widget.downloadStart_button.setEnabled(True)
+        self._view.tab_widget.downloadStart_button.setStyleSheet("color: black;")
         self._view.tab_widget.buttonDownloadCancel.setEnabled(False)
         self._view.tab_widget.buttonDownloadPauseResume.setEnabled(False)
+        self._view.tab_widget.buttonDownloadCancel.setStyleSheet("color: gray;")
+        self._view.tab_widget.buttonDownloadPauseResume.setStyleSheet("color: gray;")
         self._view.tab_widget.downloadStart_button.setText("Start")
         self._view.tab_widget.labelDownloadInfo.setText("Firmware downloaded successfully")
 
@@ -88,16 +94,22 @@ class downloadAllClass:
         self.download_patch_thread.size.connect(self.size)
         self.download_patch_thread.start()
         self._view.tab_widget.downloadStart_button.setEnabled(False)
+        self._view.tab_widget.downloadStart_button.setStyleSheet("color: gray;")
         self._view.tab_widget.downloadStart_button.setText("Downloading (2/2) ...")
         self._view.tab_widget.buttonDownloadCancel.setEnabled(True)
         self._view.tab_widget.buttonDownloadPauseResume.setEnabled(True)
+        self._view.tab_widget.buttonDownloadCancel.setStyleSheet("color: black;")
+        self._view.tab_widget.buttonDownloadPauseResume.setStyleSheet("color: black;")
         self._view.tab_widget.labelDownloadInfo.setText("Downloading patch files (2/2)...")
 
     def patch_download_finished(self, filename):
         configSettings.log(self, "Download patch finished")
         self._view.tab_widget.downloadStart_button.setEnabled(True)
+        self._view.tab_widget.downloadStart_button.setStyleSheet("color: black;")
         self._view.tab_widget.buttonDownloadCancel.setEnabled(False)
         self._view.tab_widget.buttonDownloadPauseResume.setEnabled(False)
+        self._view.tab_widget.buttonDownloadCancel.setStyleSheet("color: gray;")
+        self._view.tab_widget.buttonDownloadPauseResume.setStyleSheet("color: gray;")
         self._view.tab_widget.downloadStart_button.setText("Start")
         self._view.tab_widget.labelDownloadInfo.setText("(2/2) Patch & firmware downloaded successfully!")
         #after download is finish, start the extraction of the PATCH
@@ -120,12 +132,14 @@ class downloadAllClass:
         self.extract_thread.extractionSize.connect(self.size)
         self.extract_thread.start()
         self._view.tab_widget.downloadStart_button.setEnabled(False)
+        self._view.tab_widget.downloadStart_button.setStyleSheet("color: gray;")
         self._view.tab_widget.downloadStart_button.setText("Extracting ...")
         self._view.tab_widget.labelDownloadInfo.setText("Extracting patch files ...")
     
     def patch_extraction_finished(self):
         configSettings.log(self, "Extraction patch finished")
         self._view.tab_widget.downloadStart_button.setEnabled(True)
+        self._view.tab_widget.downloadStart_button.setStyleSheet("color: black;")
         self._view.tab_widget.downloadStart_button.setText("Start")
         self._view.tab_widget.labelDownloadInfo.setText("(1/2) Extracted patch successfully")
         #after download is finish, COPY the FIRMWARE.zip to ./src
@@ -155,6 +169,7 @@ class downloadAllClass:
     def firmware_extraction_finished(self):
         configSettings.log(self, "Extraction firmware finished")
         self._view.tab_widget.downloadStart_button.setEnabled(True)
+        self._view.tab_widget.downloadStart_button.setStyleSheet("color: black;")
         self._view.tab_widget.downloadStart_button.setText("Start")
         self._view.tab_widget.labelDownloadInfo.setText("(2/2) Extracted patch and firmware files successfully!")
 
@@ -174,8 +189,11 @@ class downloadAllClass:
     def error(self, error):
         configSettings.log(self, "Error: "+error)
         self._view.tab_widget.downloadStart_button.setEnabled(True)
+        self._view.tab_widget.downloadStart_button.setStyleSheet("color: black;")
         self._view.tab_widget.buttonDownloadCancel.setEnabled(False)
         self._view.tab_widget.buttonDownloadPauseResume.setEnabled(False)
+        self._view.tab_widget.buttonDownloadCancel.setStyleSheet("color: gray;")
+        self._view.tab_widget.buttonDownloadPauseResume.setStyleSheet("color: gray;")
         self._view.tab_widget.downloadStart_button.setText("Start")
         self._view.tab_widget.labelDownloadInfo.setText("An error occurred. Check the log.")
         return
@@ -315,10 +333,12 @@ class downloadAllClass:
             self.download_firmware_thread.pause_flag = False
             self._view.tab_widget.buttonDownloadPauseResume.setText("Pause")
             self._view.tab_widget.buttonDownloadCancel.setEnabled(True)
+            self._view.tab_widget.buttonDownloadCancel.setStyleSheet("color: black;")
         else:
             self.download_firmware_thread.pause_flag = True
             self._view.tab_widget.buttonDownloadPauseResume.setText("Resume")
             self._view.tab_widget.buttonDownloadCancel.setEnabled(False)
+            self._view.tab_widget.buttonDownloadCancel.setStyleSheet("color: gray;")
 
     def stop_download(self):
         self.download_firmware_thread.stop()

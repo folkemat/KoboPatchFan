@@ -73,6 +73,7 @@ class generator:
         self._view.tab_widget.gen_plainTextEdit.setStyleSheet("color: none")
         self._view.tab_widget.gen_plainTextEdit.clear()
         self._view.tab_widget.export_button.setEnabled(False)
+        self._view.tab_widget.export_button.setStyleSheet("color: gray;")
         #this will write kobopatch.yaml
         self.use_kobopatch(self._view.tab_widget.use_kobopatch_checkbox.isChecked())
         self.process_success = False
@@ -101,6 +102,7 @@ class generator:
         configSettings.log(self, "Started execution of run script")
         self._view.tab_widget.run_button.setEnabled(False)
         self._view.tab_widget.run_button.setText("Running ...")
+        self._view.tab_widget.run_button.setStyleSheet("color: gray;")
 
     def on_ready_read(self, output):
         data_str = output
@@ -125,6 +127,7 @@ class generator:
         self._view.tab_widget.gen_plainTextEdit.ensureCursorVisible()
         self._view.tab_widget.run_button.setEnabled(True)
         self._view.tab_widget.run_button.setText("Run")
+        self._view.tab_widget.run_button.setStyleSheet("color: black;")
         #if process finished successfully, show export options
         self.showExport()
 
@@ -136,6 +139,7 @@ class generator:
         self._view.tab_widget.export_plainTextEdit.clear()
         self._view.tab_widget.export_plainTextEdit.insertPlainText(final_file_path)
         self._view.tab_widget.export_button.setEnabled(True)
+        self._view.tab_widget.export_button.setStyleSheet("color: black;")
 
         configSettings.log(self, "Generated KoboRoot.tgz at "+str(final_file_path))
     
