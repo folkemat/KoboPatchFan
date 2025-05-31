@@ -51,7 +51,7 @@ class mainTabs(QWidget):
     self.tabs.addTab(self.tab2, "(2) Select patches")
     self.tabs.addTab(self.tab3, "(3) Generate patch")
     self.tabs.addTab(self.tab4, "Backup patches")
-    self.tabs.addTab(self.tab5, "Settings")
+    self.tabs.addTab(self.tab5, "Info")
 
     # Change font size of tabs
     self.tabs.setStyleSheet("QTabBar::tab { height: 64px; }")

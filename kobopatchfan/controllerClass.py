@@ -12,6 +12,7 @@ from editorClass import editor
 from generatorClass import generator
 from checkerClass import checkerClass
 from savedPatchesClass import savedPatches
+from configSettingsClass import configSettings
 
 class kpController(QObject):
     """KoboPatchFan's Controller class."""
@@ -39,7 +40,7 @@ class kpController(QObject):
         self.update_db.checkForDb()
         self.specifications_picker.initComboKobos()
         self.version_picker.initComboVersions()
-        self._view.statusbar.showMessage("Current target firmware: "+self.checker.readKobopatchyaml())
+        self._view.statusbar.showMessage("Current target firmware: "+self.checker.readKobopatchyaml()+"")
             
     def _connectpyqtSignals(self):
         """Connect pyqtSignals and pyqtSlots."""
@@ -57,6 +58,8 @@ class kpController(QObject):
         #Verify stuff
         self._view.tab_widget.comboVersions.currentIndexChanged.connect(partial(self.verify_download.verifyFirmwarePatch))
         self._view.tab_widget.combo.currentIndexChanged.connect(partial(self.verify_download.verifyFirmwarePatch))
+        self._view.tab_widget.checkbox_patch_anyway.stateChanged.connect(partial(self.verify_download.tryToPatchAnyway))
+        self._view.tab_widget.button_patch_anyway_help.clicked.connect(partial(self.verify_download.window_patch_anyway_help))
         #Update db stuff
         self._view.tab_widget.buttonUpdateDb.clicked.connect(partial(self.update_db.downloadDb))
         #download stuff

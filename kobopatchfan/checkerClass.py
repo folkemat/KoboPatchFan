@@ -38,3 +38,4 @@ class checkerClass:
         except Exception as e:
             configSettings.log(self, "Error Checker 2: Can not read kobopatch.yaml file!: "+str(e))
             return "Not found - click 'Start' to begin!"
+        

@@ -4,6 +4,7 @@ import os
 import re
 import json
 import shutil
+import yaml
 from configSettingsClass import configSettings
 from downloadThreadClass import DownloadThread
 from extractThreadClass import ExtractThread
@@ -23,29 +24,58 @@ class downloadAllClass:
 
     def security_question(self):
         firmwareVersion = configSettings.getSetting(self, "kobo_this_version")
+        overriddenPatchVersion = configSettings.getSetting(self, "override_kobo_this_version")
+        usingPatchAnyway = False
+        patchVersion = firmwareVersion
+        additionalText = "If no patch is available, check 'Patch anyway'<br>to try an older patch version!"
+
+        # If alternative patch version is used
+        if "0.00.00000" not in overriddenPatchVersion:
+            usingPatchAnyway = True
+            patchVersion = overriddenPatchVersion
+            additionalText = (
+                "We will apply an outdated<br>patch version to a newer firmware.<br>"
+                "Not all patches in tab (2) may work."
+            )
         koboDevice = configSettings.getSetting(self, "kobo_device")
-        result = QMessageBox.question(None, "Confirm configuration", "Kobo: "+koboDevice+"\nFirmware: "+firmwareVersion+"\n\nIs the above configuration correct?",
-                             QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.Cancel)
-        if result == QMessageBox.StandardButton.Yes:
-            return True
-        else:
-            return False
+
+        message = (
+            f"<b>Kobo:</b> {koboDevice}<br>"
+            f"<b>Firmware:</b> {firmwareVersion}<br>"
+            f"<b>Patch:</b> {patchVersion}<br>"
+            f"<b>Use old patch:</b> {'Yes' if usingPatchAnyway else 'No'}<br><br>"
+            f"<b>Note: </b><br>{additionalText}<br><br>"
+            "Is the above config okay?"
+        )
+
+        result = QMessageBox.question(
+            None,
+            "Confirm Configuration",
+            message,
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.Cancel
+        )
+
+        return result == QMessageBox.StandardButton.Yes
+
 
     def startButton(self):
         if not self.security_question():
             return
+        self.disableImportantThings()
         dbConfigs = self.readDbConfig()
         if dbConfigs:
             targetUrls = self.createDownloadLink(dbConfigs)
         else: 
             configSettings.log(self, "Error: Could not read configs for download")
             self._view.tab_widget.labelDownloadInfo.setText("Error: Could not read configs for download")
+            self.enableImportantThings()
             return
         if targetUrls:
             self.startDownloading(targetUrls)
         else:
             configSettings.log(self, "Error: Could not create all download links")
             self._view.tab_widget.labelDownloadInfo.setText("Error: Could not create all download links")
+            self.enableImportantThings()
             return
     
     def startDownloading(self, urls):
@@ -113,10 +143,10 @@ class downloadAllClass:
         self._view.tab_widget.downloadStart_button.setText("Start")
         self._view.tab_widget.labelDownloadInfo.setText("(2/2) Patch & firmware downloaded successfully!")
         #after download is finish, start the extraction of the PATCH
-        if self._view.tab_widget.checkBoxExtract.isChecked() == True:
-            self.startExtracting(filename)
-        else:
-            self._view.tab_widget.labelDownloadInfo.setText("Download (2/2) successful - extraction not requested.")
+        #if self._view.tab_widget.checkBoxExtract.isChecked() == True:
+        self.startExtracting(filename)
+        #else:
+            #self._view.tab_widget.labelDownloadInfo.setText("Download (2/2) successful - extraction not requested.")
     
     def startExtracting(self, filename):
         #start with the extraction of the PATCH
@@ -165,14 +195,42 @@ class downloadAllClass:
         except Exception as e:
             self._view.tab_widget.labelDownloadInfo.setText("Error: An unexpected error occurred while copying "+self.firmwareFileName+".")
             configSettings.log(self, "Error: An unexpected error occurred while copying "+self.firmwareFileName+".")
-        
+        #after that, change patch version to make it work
+        self.changePatchVersionToOverride()
+
+    def changePatchVersionToOverride(self):
+        self.enableImportantThings()
+        #write new VERSION to kobopatch.yaml (the save-kobopatch gets written in generator class)
+        path = str(configSettings(self._settings).app_folder)
+        kobopatch_file_path = os.path.join(path, "kobopatch.yaml")
+        override_target_firmware = configSettings.getSetting(self, "kobo_this_version")
+        if "0.00.00000" in configSettings.getSetting(self, "override_kobo_this_version"):
+            return #no need to override
+        try:
+            with open(kobopatch_file_path, encoding='utf-8') as stream:
+                data_save = yaml.safe_load(stream)
+                
+            pattern = r"\d+\.\d+\.\d+"
+            firmware_in = data_save.get("in")
+            new_version = re.sub(pattern, override_target_firmware, firmware_in)
+            data_save["in"] = new_version
+            data_save["version"] = override_target_firmware
+
+            with open(kobopatch_file_path, 'w', encoding='utf-8') as f:
+                yaml.dump(data_save, f)
+                
+            self._view.statusbar.showMessage("Overridden! New target firmware: "+self.checker.readKobopatchyaml())
+        except Exception as e:
+                configSettings.log(self, "Error write new version to kobopatch.yaml: "+str(e))
+                return
+
     def firmware_extraction_finished(self):
         configSettings.log(self, "Extraction firmware finished")
         self._view.tab_widget.downloadStart_button.setEnabled(True)
         self._view.tab_widget.downloadStart_button.setStyleSheet("color: black;")
         self._view.tab_widget.downloadStart_button.setText("Start")
         self._view.tab_widget.labelDownloadInfo.setText("(2/2) Extracted patch and firmware files successfully!")
-
+        
     def update_progress(self, progress):
         # Update the progress bar with the new progress
         self._view.tab_widget.progress_bar.setValue(progress)
@@ -188,6 +246,7 @@ class downloadAllClass:
 
     def error(self, error):
         configSettings.log(self, "Error: "+error)
+        self.enableImportantThings()
         self._view.tab_widget.downloadStart_button.setEnabled(True)
         self._view.tab_widget.downloadStart_button.setStyleSheet("color: black;")
         self._view.tab_widget.buttonDownloadCancel.setEnabled(False)
@@ -197,6 +256,22 @@ class downloadAllClass:
         self._view.tab_widget.downloadStart_button.setText("Start")
         self._view.tab_widget.labelDownloadInfo.setText("An error occurred. Check the log.")
         return
+    
+    def disableImportantThings(self):
+        self._view.tab_widget.combo.setEnabled(False)
+        self._view.tab_widget.buttonPickLatest.setEnabled(False)
+        self._view.tab_widget.comboVersions.setEnabled(False)
+        self._view.tab_widget.buttonUpdateDb.setEnabled(False)
+        self._view.tab_widget.checkbox_patch_anyway.setEnabled(False)
+        self._view.tab_widget.button_patch_anyway_help.setEnabled(False)
+        
+    def enableImportantThings(self):
+        self._view.tab_widget.combo.setEnabled(True)
+        self._view.tab_widget.buttonPickLatest.setEnabled(True)
+        self._view.tab_widget.comboVersions.setEnabled(True)
+        self._view.tab_widget.buttonUpdateDb.setEnabled(True)
+        self._view.tab_widget.checkbox_patch_anyway.setEnabled(True)
+        self._view.tab_widget.button_patch_anyway_help.setEnabled(True)
 
     def createDownloadLink(self, dbConfig):
         dh = dbConfig[0]
@@ -209,9 +284,19 @@ class downloadAllClass:
         data = updateDb.getRelevantData(self, 2)
         
         allKobos = configSettings(self._settings).allKoboDevices
+        
+        #set the firmware-version and patch-version
         firmwareVersion = configSettings.getSetting(self, "kobo_this_version")
+        patchFirmwareVersion = firmwareVersion #thats the standard, however ...
+        #use old patch version if patch-anyway
+        if "0.00.00000" not in configSettings.getSetting(self, "override_kobo_this_version"):
+            #use override version
+            patchFirmwareVersion = configSettings.getSetting(self, "override_kobo_this_version")
+        
         koboDevice = configSettings.getSetting(self, "kobo_device")
         koboVersion = "0"
+        
+        #create the patch download-link
         try:
             for element in allKobos:
                 if koboDevice in element:
@@ -242,10 +327,10 @@ class downloadAllClass:
             return
         configSettings.log(self, "Firmware URL: "+firmwareLink)
 
+        #create the patch download-link
         try:
-            #create the patch download-link
             for link in patchLinkList:
-                if firmwareVersion in link:
+                if patchFirmwareVersion in link:
                     patchLink = link
                     configSettings.log(self, "Found patch URL: "+patchLink)
                     break

@@ -1,5 +1,5 @@
 from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import QHBoxLayout, QLabel, QVBoxLayout, QGroupBox
+from PyQt6.QtWidgets import QHBoxLayout, QLabel, QVBoxLayout, QGroupBox, QCheckBox, QPushButton
 
 def _createVerify(self):
 
@@ -29,11 +29,32 @@ def _createVerify(self):
     self.labelVerifyResult.setText("Not yet verified")
     self.labelVerifyResult.setWordWrap(True)
 
+    self.labelPatchAnywayResult = QLabel()
+    self.labelPatchAnywayResult.setText("")
+    self.labelPatchAnywayResult.setWordWrap(True)
+
+    # Checkbox option if no patch is found
+    self.checkbox_patch_anyway = QCheckBox("Patch anyway")
+    self.checkbox_patch_anyway.setStyleSheet("color: green; font-weight: bold;")
+    self.checkbox_patch_anyway.hide()
+
+    self.button_patch_anyway_help = QPushButton("?")
+    self.button_patch_anyway_help.setFixedWidth(25) 
+    self.button_patch_anyway_help.hide() 
+
+    # Checkbox + Button layout
+    patchAnywayLayout = QHBoxLayout()
+    patchAnywayLayout.addWidget(self.checkbox_patch_anyway)
+    patchAnywayLayout.addWidget(self.button_patch_anyway_help)
+    patchAnywayLayout.addStretch()
+
     #adding one by one
     vbox.addWidget(self.labelVerify)
     vbox.addWidget(self.label_kobo)
     vbox.addWidget(self.label_firmware)
     vbox.addWidget(self.labelVerifyResult)
+    vbox.addWidget(self.labelPatchAnywayResult)
+    vbox.addLayout(patchAnywayLayout)
 
     self.right_half.addWidget(self.verifyGroupbox)
     self.tab1.layout.addLayout(generalVerifyLayout)

@@ -36,10 +36,10 @@ def _createDownload(self):
     self.buttonDownloadPauseResume.setStyleSheet("color: gray;")
     self.buttonDownloadCancel.setStyleSheet("color: gray;")
 
-    self.checkBoxExtract = QCheckBox(self)
-    self.checkBoxExtract.setEnabled(True)
-    self.checkBoxExtract.setChecked(True)
-    self.checkBoxExtract.setText("Extract files after download (important!)")
+    #self.checkBoxExtract = QCheckBox(self)
+    #self.checkBoxExtract.setEnabled(True)
+    #self.checkBoxExtract.setChecked(True)
+    #self.checkBoxExtract.setText("Extract files after download (important!)")
 
     self.label_speed = QLabel("Speed:", self)
     self.label_speed.setWordWrap(True)
@@ -66,7 +66,7 @@ def _createDownload(self):
     vbox.addStretch()
     vbox.addWidget(self.downloadStart_button, 0, Qt.AlignmentFlag.AlignHCenter)
     vbox.addWidget(self.labelDownloadInfo)
-    vbox.addWidget(self.checkBoxExtract)
+    #vbox.addWidget(self.checkBoxExtract)
     vbox.addWidget(self.label_speed)
     vbox.addWidget(self.label_remaining)
     vbox.addWidget(self.label_size)

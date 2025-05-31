@@ -133,15 +133,19 @@ class generator:
 
     def showExport(self):
         path = str(configSettings(self._settings).app_folder)
+
+        
         file_path = os.path.join(path, "out")
         filename = "KoboRoot.tgz"
         final_file_path = os.path.join(file_path, filename)
+        export_file_path = os.path.normpath(final_file_path)
+
         self._view.tab_widget.export_plainTextEdit.clear()
-        self._view.tab_widget.export_plainTextEdit.insertPlainText(final_file_path)
+        self._view.tab_widget.export_plainTextEdit.insertPlainText(export_file_path)
         self._view.tab_widget.export_button.setEnabled(True)
         self._view.tab_widget.export_button.setStyleSheet("color: black;")
 
-        configSettings.log(self, "Generated KoboRoot.tgz at "+str(final_file_path))
+        configSettings.log(self, "Generated KoboRoot.tgz at "+str(export_file_path))
     
     def openFolderOut(self):
         try:

@@ -50,6 +50,7 @@ class configSettings:
         allStandardSettings =	{
         "kobo_device": "Forma",
         "kobo_this_version": "0.00.00000",
+        "override_kobo_this_version": "0.00.00000",
         "filename_libnickel":filename_libnickel,
         "filename_libadobe":filename_libadobe,
         "filename_librmsdk":filename_librmsdk,
