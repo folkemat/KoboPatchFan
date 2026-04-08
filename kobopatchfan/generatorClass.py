@@ -86,6 +86,10 @@ class generator:
             file_name = 'kobopatch.sh'
             command = ['bash', os.path.join(homePath, file_name)]
             configSettings.log(self, "Found Linux, using bash to run kobopatch.sh")
+        elif platform.system() == 'Darwin':
+            file_name = 'kobopatch.sh'
+            command = ['bash', os.path.join(homePath, file_name)]
+            configSettings.log(self, "Found macOS, using bash to run kobopatch.sh")    
         else:
             self._view.tab_widget.gen_plainTextEdit.insertPlainText('This operating system is not supported!')
             configSettings.log(self, "Error: Cannot run script: This operating system is not supported!")
